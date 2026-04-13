@@ -3,6 +3,7 @@ package webclient
 import (
 	"errors"
 	"io"
+	"log"
 	"net/http"
 	"time"
 
@@ -16,6 +17,7 @@ func Get(url string) (string, error) {
 	if cached != nil {
 		return cached.(string), nil
 	}
+	log.Printf("fetching %s", url)
 	client := &http.Client{}
 	req, _ := http.NewRequest("GET", url, nil)
 	resp, err := client.Do(req)
