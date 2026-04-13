@@ -24,6 +24,7 @@ type commonReleasesHandler struct {
 }
 
 func (h *commonReleasesHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	log.Printf("request: %s %s", r.Method, r.URL)
 	w.Header().Set("Content-Type", "application/json")
 	pkg := r.PathValue("package")
 	releases, err := h.h.GetReleases(pkg)
