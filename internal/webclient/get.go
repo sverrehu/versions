@@ -5,18 +5,9 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"time"
-
-	"github.com/sverrehu/goutils/lrumap"
 )
 
-var cache *lrumap.LRUMap
-
 func Get(url string) (string, error) {
-	cached := cache.Get(url)
-	if cached != nil {
-		return cached.(string), nil
-	}
 	log.Printf("fetching %s", url)
 	client := &http.Client{}
 	req, _ := http.NewRequest("GET", url, nil)
@@ -35,10 +26,5 @@ func Get(url string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	cache.Put(url, string(body))
 	return string(body), nil
-}
-
-func init() {
-	cache = lrumap.New(1000, time.Hour)
 }
