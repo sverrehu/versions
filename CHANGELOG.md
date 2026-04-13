@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.4](https://github.com/sverrehu/versions/compare/v0.0.3...v0.0.4) (2026-04-13)
+
+
+### Bug Fixes
+
+* make smaller binary ([#10](https://github.com/sverrehu/versions/issues/10)) ([a2d1f88](https://github.com/sverrehu/versions/commit/a2d1f88a2f648ceac6aa0297d9b213745ea5f0a8))
+
 ## [0.0.3](https://github.com/sverrehu/versions/compare/v0.0.2...v0.0.3) (2026-04-13)
 
 
