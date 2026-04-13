@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.3](https://github.com/sverrehu/versions/compare/v0.0.2...v0.0.3) (2026-04-13)
+
+
+### Bug Fixes
+
+* set CGO_ENABLED=0 ([#7](https://github.com/sverrehu/versions/issues/7)) ([9565243](https://github.com/sverrehu/versions/commit/9565243a8897eb89279f0b3858b898f239b33c54))
+
 ## [0.0.2](https://github.com/sverrehu/versions/compare/v0.0.1...v0.0.2) (2026-04-13)
 
 
