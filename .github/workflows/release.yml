@@ -20,7 +20,7 @@ jobs:
           VERSION="$(grep -Po '\d+\.\d+\.\d+' .release-please-manifest.json)"
           PACKAGE="$(echo "${{ github.repository }}" | sed -e 's/.*\///')"
           mkdir builds
-          env GOOS=linux GOARCH=amd64 go build -o builds/"${PACKAGE}-${VERSION}"-linux-amd64
+          env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o builds/"${PACKAGE}-${VERSION}"-linux-amd64
 
       - name: Push GitHub release artifact
         uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2.5.0
