@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.0.5](https://github.com/sverrehu/versions/compare/v0.0.4...v0.0.5) (2026-04-14)
+
+
+### Bug Fixes
+
+* enable port override from command line ([#20](https://github.com/sverrehu/versions/issues/20)) ([9b47534](https://github.com/sverrehu/versions/commit/9b4753409000b70de70b1042f5386639ab3603e8))
+* move caching from back to front ([#17](https://github.com/sverrehu/versions/issues/17)) ([d6d25c9](https://github.com/sverrehu/versions/commit/d6d25c9e9e24fd61a1bc6df6b152b7af38438532))
+
 ## [0.0.4](https://github.com/sverrehu/versions/compare/v0.0.4...v0.0.4) (2026-04-13)
 
 
