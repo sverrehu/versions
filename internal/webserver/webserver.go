@@ -77,8 +77,7 @@ func sendBadRequest(w http.ResponseWriter, message string, url *url.URL) {
 	}
 }
 
-func Run() error {
-	port := 8086
+func Run(port int) error {
 	mux := http.NewServeMux()
 	for _, h := range handlers {
 		log.Printf("Adding handler for %s\n", h.target)
