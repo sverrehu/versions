@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.6](https://github.com/sverrehu/versions/compare/v0.0.5...v0.0.6) (2026-04-14)
+
+
+### Bug Fixes
+
+* use getopt instead of flag ([#21](https://github.com/sverrehu/versions/issues/21)) ([e77be27](https://github.com/sverrehu/versions/commit/e77be27ab37d49790b0f090e5ea01db33b477e67))
+
 ## [0.0.5](https://github.com/sverrehu/versions/compare/v0.0.4...v0.0.5) (2026-04-14)
 
 
