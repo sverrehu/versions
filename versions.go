@@ -1,15 +1,21 @@
 package main
 
 import (
-	"flag"
+	"os"
 
 	"github.com/sverrehu/gotest/versions/internal/webserver"
+	"github.com/sverrehu/goutils/getopt"
 )
 
 func main() {
-	port := flag.Int("port", 8086, "web server listening port for HTTP")
-	flag.Parse()
-	err := webserver.Run(*port)
+	help := false
+	port := 8086
+	opts := []getopt.Option{
+		{ShortName: 'h', LongName: "help", Type: getopt.Flag, Target: &help},
+		{ShortName: 'p', LongName: "port", Type: getopt.Integer, Target: &port},
+	}
+	getopt.Parse(&os.Args, opts, false)
+	err := webserver.Run(port)
 	if err != nil {
 		panic(err)
 	}
