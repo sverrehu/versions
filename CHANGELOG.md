@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.9](https://github.com/sverrehu/versions/compare/v0.0.8...v0.0.9) (2026-04-15)
+
+
+### Bug Fixes
+
+* add source-url ([#27](https://github.com/sverrehu/versions/issues/27)) ([41acc93](https://github.com/sverrehu/versions/commit/41acc9397bedfc0c42ef500354f2d0726ae91527))
+
 ## [0.0.8](https://github.com/sverrehu/versions/compare/v0.0.7...v0.0.8) (2026-04-15)
 
 
