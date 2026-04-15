@@ -148,6 +148,7 @@ func translateGitHubReleasesResponse(jsonResponse string) ([]internal.Release, e
 		release := internal.Release{}
 		release.Version = result.TagName
 		release.ReleasedAt = result.PublishedAt
+		release.ReleaseURL = &result.HTMLURL
 		releases = append(releases, release)
 	}
 	return releases, nil
