@@ -3,7 +3,8 @@
 **This is work in early progress**
 
 A proxy providing version information from various repositories.
-Mainly created to overcome the shortcomings of the Artifactory vs [Renovate](https://github.com/renovatebot/renovate) combo where I currently work, in which Artifactory in the only application with access to the Internet.
+Mainly created to overcome the shortcomings of the [Artifactory](https://jfrog.com/artifactory/) vs [Renovate](https://github.com/renovatebot/renovate) combo where I currently work, in which Artifactory in the only application with access to the Internet.
+
 Unfortunately, Artifactory has proven to be quite bad at providing what Renovate needs to suggest updates in our internal Git repo.
 
 * New versions are not reported for GitHub and GitLab artifacts, unless someone already downloaded.
