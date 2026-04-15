@@ -7,7 +7,7 @@ Mainly created to overcome the shortcomings of the Artifactory vs [Renovate](htt
 Unfortunately, Artifactory has proven to be quite bad at providing what Renovate needs to suggest updates in our internal Git repo.
 
 * New versions are not reported for GitHub and GitLab artifacts, unless someone already downloaded.
-* Release timestamp is not reported for Dockerhub images, making it impossible to use Renovate's [quarantine feature](https://docs.renovatebot.com/key-concepts/minimum-release-age/).
+* Release timestamps are not reported for Dockerhub images, making it impossible to use Renovate's [quarantine feature](https://docs.renovatebot.com/key-concepts/minimum-release-age/).
 
 If this proxy runs alongside Artifactory (i.e. on the host with access to the Internet), and Renovate is properly configured to use it via [custom data sources](https://docs.renovatebot.com/modules/datasource/custom/), these problems will be solved.
 
@@ -22,5 +22,5 @@ In semi-prioritized order:
 * Support pagination for data sources; currently only the first page is parsed.
 * Use native Renovate format for output.
 * Persistent and perhaps shared cache.
-* ~~Where applicable, include release notes.~~
+* ~~Where applicable, include release notes.~~ (done for existing data sources)
 * Add more data sources.
