@@ -11,7 +11,7 @@ import (
 	"github.com/sverrehu/gotest/versions/internal/webclient"
 )
 
-// sample:https://gitlab.com/api/v4/projects/gitlab-org%2Fgitlab-runner/releases?page=1&per_page=100
+// sample: https://gitlab.com/api/v4/projects/gitlab-org%2Fgitlab-runner/releases?page=1&per_page=100
 
 type GitLabReleasesFetcher struct {
 }
@@ -122,6 +122,7 @@ func translateGitLabReleasesResponse(jsonResponse string) ([]internal.Release, e
 		release := internal.Release{}
 		release.Version = result.TagName
 		release.ReleasedAt = result.ReleasedAt
+		release.ReleaseURL = &result.Links.Self
 		releases = append(releases, release)
 	}
 	return releases, nil
