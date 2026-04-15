@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.10](https://github.com/sverrehu/versions/compare/v0.0.9...v0.0.10) (2026-04-15)
+
+
+### Bug Fixes
+
+* enable configuration file ([#29](https://github.com/sverrehu/versions/issues/29)) ([d714e90](https://github.com/sverrehu/versions/commit/d714e9024a4f0593f7b95fef0d98d81636595e39))
+
 ## [0.0.9](https://github.com/sverrehu/versions/compare/v0.0.8...v0.0.9) (2026-04-15)
 
 
