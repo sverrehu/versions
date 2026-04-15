@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.7](https://github.com/sverrehu/versions/compare/v0.0.6...v0.0.7) (2026-04-15)
+
+
+### Bug Fixes
+
+* add support for GitLab releases ([#23](https://github.com/sverrehu/versions/issues/23)) ([9f7bb7f](https://github.com/sverrehu/versions/commit/9f7bb7f371689c7d4f3f6d4378717f4779c4bb82))
+
 ## [0.0.6](https://github.com/sverrehu/versions/compare/v0.0.5...v0.0.6) (2026-04-14)
 
 
