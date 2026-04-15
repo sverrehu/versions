@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/sverrehu/gotest/versions/internal/config"
@@ -18,6 +19,9 @@ func main() {
 		{ShortName: 'c', LongName: "config", Type: getopt.String, Target: &configFile},
 	}
 	getopt.Parse(&os.Args, opts, false)
+	if help {
+		usage()
+	}
 	err := config.LoadConfig(configFile)
 	if err != nil {
 		panic(err)
@@ -29,4 +33,13 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+}
+
+func usage() {
+	fmt.Println("Usage: versions [option ...]")
+	fmt.Println("")
+	fmt.Println("  -p, --port=PORT    web server port to listen to")
+	fmt.Println("  -c, --config=FILE  configuration file in YAML format")
+	fmt.Println("")
+	os.Exit(0)
 }
