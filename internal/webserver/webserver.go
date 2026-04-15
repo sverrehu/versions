@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/sverrehu/gotest/versions/internal/config"
 	"github.com/sverrehu/gotest/versions/internal/repos"
 	"github.com/sverrehu/goutils/lrumap"
 )
@@ -77,12 +78,13 @@ func sendBadRequest(w http.ResponseWriter, message string, url *url.URL) {
 	}
 }
 
-func Run(port int) error {
+func Run() error {
 	mux := http.NewServeMux()
 	for _, h := range handlers {
 		log.Printf("Adding handler for %s\n", h.target)
 		mux.Handle(h.target+"/{package...}", h.handler)
 	}
+	port := config.Cfg().WebServer.Port
 	log.Printf("Starting server at port %d\n", port)
 	err := http.ListenAndServe(":"+strconv.Itoa(port), mux)
 	return err

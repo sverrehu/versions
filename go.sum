@@ -2,3 +2,5 @@ github.com/sverrehu/goutils v1.0.1 h1:L+AaZ7WPWUaTuOu8NuM9MFqg3pi/7VJQM815oUrILg
 github.com/sverrehu/goutils v1.0.1/go.mod h1:wWyA4qjpWkaOx0L2WZ/VnzzsgfUbsVi5e8pYTPPAUYE=
 github.com/sverrehu/goutils v1.0.2 h1:g3U54p9XlCPlbg391SKKbQdTnjg8gFHHs3khA95YgS8=
 github.com/sverrehu/goutils v1.0.2/go.mod h1:wWyA4qjpWkaOx0L2WZ/VnzzsgfUbsVi5e8pYTPPAUYE=
+go.yaml.in/yaml/v4 v4.0.0-rc.4 h1:UP4+v6fFrBIb1l934bDl//mmnoIZEDK0idg1+AIvX5U=
+go.yaml.in/yaml/v4 v4.0.0-rc.4/go.mod h1:aZqd9kCMsGL7AuUv/m/PvWLdg5sjJsZ4oHDEnfPPfY0=
