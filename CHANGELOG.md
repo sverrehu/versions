@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.8](https://github.com/sverrehu/versions/compare/v0.0.7...v0.0.8) (2026-04-15)
+
+
+### Bug Fixes
+
+* add release_url to some repos ([#25](https://github.com/sverrehu/versions/issues/25)) ([6d3fb1b](https://github.com/sverrehu/versions/commit/6d3fb1bd52d4ff9b0e7bd628134d9d9a641e06b7))
+
 ## [0.0.7](https://github.com/sverrehu/versions/compare/v0.0.6...v0.0.7) (2026-04-15)
 
 
