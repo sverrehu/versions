@@ -100,7 +100,7 @@ func getGitLabReleases(owner, repo string) ([]internal.Release, error) {
 	if body == "" {
 		return make([]internal.Release, 0), nil
 	}
-	releases, err := translateGitLabReleasesResponse(body)
+	releases, err := translateGitLabReleasesResponse(body, owner, repo)
 	if err != nil {
 		return nil, err
 	}
@@ -111,7 +111,7 @@ func getGitLabSearchUrl(owner, repo string) string {
 	return "https://gitlab.com/api/v4/projects/" + url.PathEscape(owner+"/"+repo) + "/releases?page=1&per_page=100"
 }
 
-func translateGitLabReleasesResponse(jsonResponse string) ([]internal.Release, error) {
+func translateGitLabReleasesResponse(jsonResponse, owner, repo string) ([]internal.Release, error) {
 	var resp fullGitLabReleasesResponse
 	err := json.Unmarshal([]byte(jsonResponse), &resp)
 	if err != nil {
@@ -123,6 +123,8 @@ func translateGitLabReleasesResponse(jsonResponse string) ([]internal.Release, e
 		release.Version = result.TagName
 		release.ReleasedAt = result.ReleasedAt
 		release.ReleaseURL = &result.Links.Self
+		sourceURL := "https://gitlab.com/" + url.PathEscape(owner) + "/" + url.PathEscape(repo)
+		release.SourceURL = &sourceURL
 		releases = append(releases, release)
 	}
 	return releases, nil
