@@ -126,7 +126,7 @@ func getGitHubReleases(owner, repo string) ([]internal.Release, error) {
 	if body == "" {
 		return make([]internal.Release, 0), nil
 	}
-	releases, err := translateGitHubReleasesResponse(body)
+	releases, err := translateGitHubReleasesResponse(body, owner, repo)
 	if err != nil {
 		return nil, err
 	}
@@ -137,7 +137,7 @@ func getGitHubSearchUrl(owner, repo string) string {
 	return "https://api.github.com/repos/" + url.PathEscape(owner) + "/" + url.PathEscape(repo) + "/releases?page=1&per_page=100"
 }
 
-func translateGitHubReleasesResponse(jsonResponse string) ([]internal.Release, error) {
+func translateGitHubReleasesResponse(jsonResponse, owner, repo string) ([]internal.Release, error) {
 	var resp fullGitHubReleasesResponse
 	err := json.Unmarshal([]byte(jsonResponse), &resp)
 	if err != nil {
@@ -149,6 +149,8 @@ func translateGitHubReleasesResponse(jsonResponse string) ([]internal.Release, e
 		release.Version = result.TagName
 		release.ReleasedAt = result.PublishedAt
 		release.ReleaseURL = &result.HTMLURL
+		sourceURL := "https://github.com/" + url.PathEscape(owner) + "/" + url.PathEscape(repo)
+		release.SourceURL = &sourceURL
 		releases = append(releases, release)
 	}
 	return releases, nil
