@@ -1,9 +1,12 @@
 package repos
 
-import "github.com/sverrehu/gotest/versions/internal"
+import (
+	"github.com/sverrehu/gotest/versions/internal"
+	"github.com/sverrehu/gotest/versions/internal/config"
+)
 
 type ReleasesFetcher interface {
-	GetReleases(pkg string) ([]internal.Release, error)
+	GetReleases(pkg string, credentials *config.Credentials) ([]internal.Release, error)
 }
 
 type ReleasesFetcherError struct {

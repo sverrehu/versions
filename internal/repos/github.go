@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/sverrehu/gotest/versions/internal"
+	"github.com/sverrehu/gotest/versions/internal/config"
 	"github.com/sverrehu/gotest/versions/internal/webclient"
 )
 
@@ -109,17 +110,17 @@ type fullGitHubReleasesResponse []struct {
 	DiscussionURL string `json:"discussion_url,omitempty"`
 }
 
-func (rf GitHubReleasesFetcher) GetReleases(pkg string) ([]internal.Release, error) {
+func (rf GitHubReleasesFetcher) GetReleases(pkg string, credentials *config.Credentials) ([]internal.Release, error) {
 	parts := regexp.MustCompile("[:/]").Split(pkg, -1)
 	if len(parts) != 2 {
 		return nil, &ReleasesFetcherError{Err: fmt.Errorf("expected two parts, separated by '/' in GitHub releases package, got %s", pkg), IsParameterError: true}
 	}
-	return getGitHubReleases(parts[0], parts[1])
+	return getGitHubReleases(parts[0], parts[1], credentials)
 }
 
-func getGitHubReleases(owner, repo string) ([]internal.Release, error) {
+func getGitHubReleases(owner, repo string, credentials *config.Credentials) ([]internal.Release, error) {
 	searchUrl := getGitHubSearchUrl(owner, repo)
-	body, err := webclient.Get(searchUrl)
+	body, err := webclient.Get(searchUrl, credentials)
 	if err != nil {
 		return nil, err
 	}
