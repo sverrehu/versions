@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/sverrehu/gotest/versions/internal"
+	"github.com/sverrehu/gotest/versions/internal/config"
 	"github.com/sverrehu/gotest/versions/internal/webclient"
 )
 
@@ -25,17 +26,17 @@ type fullSonatypeResponse struct {
 	} `json:"response"`
 }
 
-func (rf MavenReleasesFetcher) GetReleases(pkg string) ([]internal.Release, error) {
+func (rf MavenReleasesFetcher) GetReleases(pkg string, credentials *config.Credentials) ([]internal.Release, error) {
 	parts := regexp.MustCompile("[:/]").Split(pkg, -1)
 	if len(parts) != 2 {
 		return nil, &ReleasesFetcherError{Err: fmt.Errorf("expected two parts, separated by ':' or '/' in maven package, got %s", pkg), IsParameterError: true}
 	}
-	return getMavenReleases(parts[0], parts[1])
+	return getMavenReleases(parts[0], parts[1], credentials)
 }
 
-func getMavenReleases(groupId, artifactId string) ([]internal.Release, error) {
+func getMavenReleases(groupId, artifactId string, credentials *config.Credentials) ([]internal.Release, error) {
 	searchUrl := getSonatypeSearchUrl(groupId, artifactId)
-	body, err := webclient.Get(searchUrl)
+	body, err := webclient.Get(searchUrl, credentials)
 	if err != nil {
 		return nil, err
 	}

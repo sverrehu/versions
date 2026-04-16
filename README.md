@@ -16,7 +16,7 @@ If this proxy runs alongside Artifactory (i.e. on the host with access to the In
 
 In semi-prioritized order:
 
-* Support authentication with the data sources, in order to enable more queries (avoid rate limiting for anonymous).
+* ~~Support authentication with the data sources, in order to enable more queries (avoid rate limiting for anonymous).~~ (done for GitHub/GitLab)
 * Gracefully handle error codes from downstream.
   Currently, everything bad from the backends lead to 500.
   Need to report back on rate limiting errors, at least.

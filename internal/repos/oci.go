@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/sverrehu/gotest/versions/internal"
+	"github.com/sverrehu/gotest/versions/internal/config"
 	"github.com/sverrehu/gotest/versions/internal/webclient"
 )
 
@@ -53,17 +54,17 @@ type fullOCIResponse struct {
 	} `json:"results"`
 }
 
-func (rf OCIReleasesFetcher) GetReleases(pkg string) ([]internal.Release, error) {
+func (rf OCIReleasesFetcher) GetReleases(pkg string, credentials *config.Credentials) ([]internal.Release, error) {
 	parts := regexp.MustCompile("[:/]").Split(pkg, -1)
 	if len(parts) != 2 {
 		return nil, &ReleasesFetcherError{Err: fmt.Errorf("expected two parts, separated by '/' in OCI package, got %s", pkg), IsParameterError: true}
 	}
-	return getOciReleases(parts[0], parts[1])
+	return getOciReleases(parts[0], parts[1], credentials)
 }
 
-func getOciReleases(repo, image string) ([]internal.Release, error) {
+func getOciReleases(repo, image string, credentials *config.Credentials) ([]internal.Release, error) {
 	searchUrl := getOciSearchUrl(repo, image)
-	body, err := webclient.Get(searchUrl)
+	body, err := webclient.Get(searchUrl, credentials)
 	if err != nil {
 		return nil, err
 	}
