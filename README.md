@@ -21,7 +21,7 @@ In semi-prioritized order:
   Currently, everything bad from the backends lead to 500.
   Need to report back on rate limiting errors, at least.
 * Support pagination for data sources; currently only the first page is parsed.
-* Use native Renovate format for output.
+* ~~Use native Renovate format for output.~~ (done)
 * Persistent and perhaps shared cache.
 * ~~Where applicable, include release notes.~~ (done for existing data sources)
 * Add more data sources.
