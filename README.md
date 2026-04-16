@@ -27,12 +27,3 @@ In semi-prioritized order:
 * Add more data sources.
   This is the last item because I think that when everything above is in place, it will be possible to see what can be extracted to avoid too much duplicate code.
   There is duplication already, but it is my intention to clean it up, eventually.
-
-## Want to contribute?
-
-I'm a self-made guy.
-I don't like external dependencies.
-(I made an exception for the YAML dependency since I'm new to Go.
-I already implemented a JSON encoder/decoder in my old language, Java, which was faster than any other implementation at that time.)
-Every contribution that doesn't add external dependencies without good reason, is welcome.
-Contributions that make me better at Go, are especially welcome.
