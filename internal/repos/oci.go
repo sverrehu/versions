@@ -54,7 +54,7 @@ type fullOCIResponse struct {
 	} `json:"results"`
 }
 
-func (rf OCIReleasesFetcher) GetReleases(pkg string, credentials *config.Credentials) ([]internal.Release, error) {
+func (rf OCIReleasesFetcher) GetReleases(pkg string, credentials *config.Credentials) (*internal.ReleasesResponse, error) {
 	parts := regexp.MustCompile("[:/]").Split(pkg, -1)
 	if len(parts) != 2 {
 		return nil, &ReleasesFetcherError{Err: fmt.Errorf("expected two parts, separated by '/' in OCI package, got %s", pkg), IsParameterError: true}
@@ -62,14 +62,14 @@ func (rf OCIReleasesFetcher) GetReleases(pkg string, credentials *config.Credent
 	return getOciReleases(parts[0], parts[1], credentials)
 }
 
-func getOciReleases(repo, image string, credentials *config.Credentials) ([]internal.Release, error) {
+func getOciReleases(repo, image string, credentials *config.Credentials) (*internal.ReleasesResponse, error) {
 	searchUrl := getOciSearchUrl(repo, image)
 	body, err := webclient.Get(searchUrl, credentials)
 	if err != nil {
 		return nil, err
 	}
 	if body == "" {
-		return make([]internal.Release, 0), nil
+		return &internal.ReleasesResponse{}, nil
 	}
 	releases, err := translateOCIResponse(body)
 	if err != nil {
@@ -82,18 +82,21 @@ func getOciSearchUrl(repo, image string) string {
 	return "https://hub.docker.com/v2/repositories/" + url.PathEscape(repo) + "/" + url.PathEscape(image) + "/tags?page=1&page_size=100"
 }
 
-func translateOCIResponse(jsonResponse string) ([]internal.Release, error) {
+func translateOCIResponse(jsonResponse string) (*internal.ReleasesResponse, error) {
 	var resp fullOCIResponse
 	err := json.Unmarshal([]byte(jsonResponse), &resp)
 	if err != nil {
 		return nil, err
 	}
-	releases := make([]internal.Release, 0, resp.Count)
-	for _, result := range resp.Results {
-		release := internal.Release{}
-		release.Version = result.Name
-		release.ReleasedAt = result.TagLastPushed
-		releases = append(releases, release)
+	releases := internal.ReleasesResponse{
+		Releases: make([]internal.Release, 0, resp.Count),
 	}
-	return releases, nil
+	for _, result := range resp.Results {
+		release := internal.Release{
+			Version:          result.Name,
+			ReleaseTimestamp: result.TagLastPushed,
+		}
+		releases.Releases = append(releases.Releases, release)
+	}
+	return &releases, nil
 }

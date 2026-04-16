@@ -84,7 +84,7 @@ type fullGitLabReleasesResponse []struct {
 	} `json:"_links"`
 }
 
-func (rf GitLabReleasesFetcher) GetReleases(pkg string, credentials *config.Credentials) ([]internal.Release, error) {
+func (rf GitLabReleasesFetcher) GetReleases(pkg string, credentials *config.Credentials) (*internal.ReleasesResponse, error) {
 	parts := regexp.MustCompile("[/]").Split(pkg, -1)
 	if len(parts) != 2 {
 		return nil, &ReleasesFetcherError{Err: fmt.Errorf("expected two parts, separated by '/' in GitLab releases package, got %s", pkg), IsParameterError: true}
@@ -92,14 +92,14 @@ func (rf GitLabReleasesFetcher) GetReleases(pkg string, credentials *config.Cred
 	return getGitLabReleases(parts[0], parts[1], credentials)
 }
 
-func getGitLabReleases(owner, repo string, credentials *config.Credentials) ([]internal.Release, error) {
+func getGitLabReleases(owner, repo string, credentials *config.Credentials) (*internal.ReleasesResponse, error) {
 	searchUrl := getGitLabSearchUrl(owner, repo)
 	body, err := webclient.Get(searchUrl, credentials)
 	if err != nil {
 		return nil, err
 	}
 	if body == "" {
-		return make([]internal.Release, 0), nil
+		return &internal.ReleasesResponse{}, nil
 	}
 	releases, err := translateGitLabReleasesResponse(body, owner, repo)
 	if err != nil {
@@ -112,21 +112,26 @@ func getGitLabSearchUrl(owner, repo string) string {
 	return "https://gitlab.com/api/v4/projects/" + url.PathEscape(owner+"/"+repo) + "/releases?page=1&per_page=100"
 }
 
-func translateGitLabReleasesResponse(jsonResponse, owner, repo string) ([]internal.Release, error) {
+func translateGitLabReleasesResponse(jsonResponse, owner, repo string) (*internal.ReleasesResponse, error) {
 	var resp fullGitLabReleasesResponse
 	err := json.Unmarshal([]byte(jsonResponse), &resp)
 	if err != nil {
 		return nil, err
 	}
-	releases := make([]internal.Release, 0, len(resp))
-	for _, result := range resp {
-		release := internal.Release{}
-		release.Version = result.TagName
-		release.ReleasedAt = result.ReleasedAt
-		release.ReleaseURL = &result.Links.Self
-		sourceURL := "https://gitlab.com/" + url.PathEscape(owner) + "/" + url.PathEscape(repo)
-		release.SourceURL = &sourceURL
-		releases = append(releases, release)
+	sourceURL := "https://gitlab.com/" + url.PathEscape(owner) + "/" + url.PathEscape(repo)
+	sourceDirectory := owner + "/" + repo
+	releases := internal.ReleasesResponse{
+		Releases:        make([]internal.Release, 0, len(resp)),
+		SourceURL:       &sourceURL,
+		SourceDirectory: &sourceDirectory,
 	}
-	return releases, nil
+	for _, result := range resp {
+		release := internal.Release{
+			Version:          result.TagName,
+			ReleaseTimestamp: result.ReleasedAt,
+			ChangelogURL:     &result.Links.Self,
+		}
+		releases.Releases = append(releases.Releases, release)
+	}
+	return &releases, nil
 }

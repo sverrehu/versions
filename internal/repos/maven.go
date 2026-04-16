@@ -26,7 +26,7 @@ type fullSonatypeResponse struct {
 	} `json:"response"`
 }
 
-func (rf MavenReleasesFetcher) GetReleases(pkg string, credentials *config.Credentials) ([]internal.Release, error) {
+func (rf MavenReleasesFetcher) GetReleases(pkg string, credentials *config.Credentials) (*internal.ReleasesResponse, error) {
 	parts := regexp.MustCompile("[:/]").Split(pkg, -1)
 	if len(parts) != 2 {
 		return nil, &ReleasesFetcherError{Err: fmt.Errorf("expected two parts, separated by ':' or '/' in maven package, got %s", pkg), IsParameterError: true}
@@ -34,14 +34,14 @@ func (rf MavenReleasesFetcher) GetReleases(pkg string, credentials *config.Crede
 	return getMavenReleases(parts[0], parts[1], credentials)
 }
 
-func getMavenReleases(groupId, artifactId string, credentials *config.Credentials) ([]internal.Release, error) {
+func getMavenReleases(groupId, artifactId string, credentials *config.Credentials) (*internal.ReleasesResponse, error) {
 	searchUrl := getSonatypeSearchUrl(groupId, artifactId)
 	body, err := webclient.Get(searchUrl, credentials)
 	if err != nil {
 		return nil, err
 	}
 	if body == "" {
-		return make([]internal.Release, 0), nil
+		return &internal.ReleasesResponse{}, nil
 	}
 	releases, err := translateSonatypeResponse(body)
 	if err != nil {
@@ -54,18 +54,21 @@ func getSonatypeSearchUrl(groupId, artifactId string) string {
 	return "https://central.sonatype.com/solrsearch/select?wt=json&q=g:" + url.QueryEscape(groupId) + "+AND+a:" + url.QueryEscape(artifactId) + "&sort=v+desc"
 }
 
-func translateSonatypeResponse(jsonResponse string) ([]internal.Release, error) {
+func translateSonatypeResponse(jsonResponse string) (*internal.ReleasesResponse, error) {
 	var resp fullSonatypeResponse
 	err := json.Unmarshal([]byte(jsonResponse), &resp)
 	if err != nil {
 		return nil, err
 	}
-	releases := make([]internal.Release, 0, len(resp.Response.Docs))
-	for _, doc := range resp.Response.Docs {
-		release := internal.Release{}
-		release.Version = doc.V
-		release.ReleasedAt = time.UnixMilli(doc.Timestamp)
-		releases = append(releases, release)
+	releases := internal.ReleasesResponse{
+		Releases: make([]internal.Release, 0, len(resp.Response.Docs)),
 	}
-	return releases, nil
+	for _, doc := range resp.Response.Docs {
+		release := internal.Release{
+			Version:          doc.V,
+			ReleaseTimestamp: time.UnixMilli(doc.Timestamp),
+		}
+		releases.Releases = append(releases.Releases, release)
+	}
+	return &releases, nil
 }

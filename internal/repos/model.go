@@ -6,7 +6,7 @@ import (
 )
 
 type ReleasesFetcher interface {
-	GetReleases(pkg string, credentials *config.Credentials) ([]internal.Release, error)
+	GetReleases(pkg string, credentials *config.Credentials) (*internal.ReleasesResponse, error)
 }
 
 type ReleasesFetcherError struct {

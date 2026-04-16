@@ -110,7 +110,7 @@ type fullGitHubReleasesResponse []struct {
 	DiscussionURL string `json:"discussion_url,omitempty"`
 }
 
-func (rf GitHubReleasesFetcher) GetReleases(pkg string, credentials *config.Credentials) ([]internal.Release, error) {
+func (rf GitHubReleasesFetcher) GetReleases(pkg string, credentials *config.Credentials) (*internal.ReleasesResponse, error) {
 	parts := regexp.MustCompile("[:/]").Split(pkg, -1)
 	if len(parts) != 2 {
 		return nil, &ReleasesFetcherError{Err: fmt.Errorf("expected two parts, separated by '/' in GitHub releases package, got %s", pkg), IsParameterError: true}
@@ -118,14 +118,14 @@ func (rf GitHubReleasesFetcher) GetReleases(pkg string, credentials *config.Cred
 	return getGitHubReleases(parts[0], parts[1], credentials)
 }
 
-func getGitHubReleases(owner, repo string, credentials *config.Credentials) ([]internal.Release, error) {
+func getGitHubReleases(owner, repo string, credentials *config.Credentials) (*internal.ReleasesResponse, error) {
 	searchUrl := getGitHubSearchUrl(owner, repo)
 	body, err := webclient.Get(searchUrl, credentials)
 	if err != nil {
 		return nil, err
 	}
 	if body == "" {
-		return make([]internal.Release, 0), nil
+		return &internal.ReleasesResponse{}, nil
 	}
 	releases, err := translateGitHubReleasesResponse(body, owner, repo)
 	if err != nil {
@@ -138,21 +138,26 @@ func getGitHubSearchUrl(owner, repo string) string {
 	return "https://api.github.com/repos/" + url.PathEscape(owner) + "/" + url.PathEscape(repo) + "/releases?page=1&per_page=100"
 }
 
-func translateGitHubReleasesResponse(jsonResponse, owner, repo string) ([]internal.Release, error) {
+func translateGitHubReleasesResponse(jsonResponse, owner, repo string) (*internal.ReleasesResponse, error) {
 	var resp fullGitHubReleasesResponse
 	err := json.Unmarshal([]byte(jsonResponse), &resp)
 	if err != nil {
 		return nil, err
 	}
-	releases := make([]internal.Release, 0, len(resp))
-	for _, result := range resp {
-		release := internal.Release{}
-		release.Version = result.TagName
-		release.ReleasedAt = result.PublishedAt
-		release.ReleaseURL = &result.HTMLURL
-		sourceURL := "https://github.com/" + url.PathEscape(owner) + "/" + url.PathEscape(repo)
-		release.SourceURL = &sourceURL
-		releases = append(releases, release)
+	sourceURL := "https://github.com/" + url.PathEscape(owner) + "/" + url.PathEscape(repo)
+	sourceDirectory := owner + "/" + repo
+	releases := internal.ReleasesResponse{
+		Releases:        make([]internal.Release, 0, len(resp)),
+		SourceURL:       &sourceURL,
+		SourceDirectory: &sourceDirectory,
 	}
-	return releases, nil
+	for _, result := range resp {
+		release := internal.Release{
+			Version:          result.TagName,
+			ReleaseTimestamp: result.PublishedAt,
+			ChangelogURL:     &result.HTMLURL,
+		}
+		releases.Releases = append(releases.Releases, release)
+	}
+	return &releases, nil
 }
