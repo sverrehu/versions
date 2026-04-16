@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.0](https://github.com/sverrehu/versions/compare/v0.0.11...v0.1.0) (2026-04-16)
+
+
+### Features
+
+* use native Renovate response layout ([#44](https://github.com/sverrehu/versions/issues/44)) ([a4a465f](https://github.com/sverrehu/versions/commit/a4a465f37469e8d4d29fcf7936ce92997c44a3d4))
+
 ## [0.0.11](https://github.com/sverrehu/versions/compare/v0.0.10...v0.0.11) (2026-04-16)
 
 
