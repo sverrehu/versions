@@ -21,8 +21,8 @@ type Credentials struct {
 }
 
 type Config struct {
-	WebServer   WebServer              `yaml:"webServer"`
-	Credentials map[string]Credentials `yaml:"credentials"`
+	WebServer   WebServer               `yaml:"webServer"`
+	Credentials map[string]*Credentials `yaml:"credentials"`
 }
 
 var cfg Config
