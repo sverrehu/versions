@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.11](https://github.com/sverrehu/versions/compare/v0.0.10...v0.0.11) (2026-04-16)
+
+
+### Bug Fixes
+
+* add support for GitHub/GitLab tokens ([#41](https://github.com/sverrehu/versions/issues/41)) ([cada6d5](https://github.com/sverrehu/versions/commit/cada6d55d339c11c5f97df2521a1a0bd710d576b))
+
 ## [0.0.10](https://github.com/sverrehu/versions/compare/v0.0.9...v0.0.10) (2026-04-15)
 
 
