@@ -1,6 +1,7 @@
 package webserver
 
 import (
+	_ "embed"
 	"encoding/json"
 	"errors"
 	"log"
@@ -13,6 +14,9 @@ import (
 	"github.com/sverrehu/gotest/versions/internal/repos"
 	"github.com/sverrehu/goutils/lrumap"
 )
+
+//go:embed index.html
+var indexPage []byte
 
 type handler struct {
 	target  string
@@ -27,6 +31,8 @@ var cache *lrumap.LRUMap
 type commonReleasesHandler struct {
 	h repos.ReleasesFetcher
 }
+
+type indexHandler struct{}
 
 func (h *commonReleasesHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	log.Printf("request: %s %s", r.Method, r.URL)
@@ -62,6 +68,14 @@ func (h *commonReleasesHandler) ServeHTTP(w http.ResponseWriter, r *http.Request
 	}
 }
 
+func (h *indexHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+	_, err := w.Write(indexPage)
+	if err != nil {
+		log.Printf("error writing response for url: %v: %v", r.URL, err.Error())
+	}
+}
+
 func sendInternalServerError(w http.ResponseWriter, err error, url *url.URL) {
 	log.Printf("internal server error for url: %v: %v", url, err.Error())
 	w.WriteHeader(http.StatusInternalServerError)
@@ -85,6 +99,7 @@ func Run(cacheMinutes, cacheSize int) error {
 		log.Printf("Adding handler for %s\n", h.target)
 		mux.Handle(h.target+"/{package...}", h.handler)
 	}
+	mux.Handle("/", &indexHandler{})
 	port := config.Cfg().WebServer.Port
 	log.Printf("Starting server at port %d, with cache timeout of %d minutes and cache size of %d\n", port, cacheMinutes, cacheSize)
 	err := http.ListenAndServe(":"+strconv.Itoa(port), mux)
