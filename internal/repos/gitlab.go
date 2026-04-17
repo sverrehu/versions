@@ -119,11 +119,9 @@ func translateGitLabReleasesResponse(jsonResponse, owner, repo string) (*interna
 		return nil, err
 	}
 	sourceURL := "https://gitlab.com/" + url.PathEscape(owner) + "/" + url.PathEscape(repo)
-	sourceDirectory := owner + "/" + repo
 	releases := internal.ReleasesResponse{
-		Releases:        make([]internal.Release, 0, len(resp)),
-		SourceURL:       &sourceURL,
-		SourceDirectory: &sourceDirectory,
+		Releases:  make([]internal.Release, 0, len(resp)),
+		SourceURL: &sourceURL,
 	}
 	for _, result := range resp {
 		release := internal.Release{
