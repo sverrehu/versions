@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.1.4](https://github.com/sverrehu/versions/compare/v0.1.3...v0.1.4) (2026-04-17)
+
+
+### Bug Fixes
+
+* add simple index page ([d354f2e](https://github.com/sverrehu/versions/commit/d354f2e38e81bdb49f94eb4379a0afe26ae6eb8a))
+* correct bad copy paste ([8912cb9](https://github.com/sverrehu/versions/commit/8912cb918d672304cfdf7988ee8f00fcb949d1f6))
+* correct bad copy paste ([15dfde5](https://github.com/sverrehu/versions/commit/15dfde56c6ecd78c1d2d2796267ed66bb73bd1e2))
+
 ## [0.1.3](https://github.com/sverrehu/versions/compare/v0.1.2...v0.1.3) (2026-04-17)
 
 
