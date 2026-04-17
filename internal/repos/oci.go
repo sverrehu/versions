@@ -54,7 +54,7 @@ type fullOCIResponse struct {
 	} `json:"results"`
 }
 
-func (rf OCIReleasesFetcher) GetReleases(pkg string, credentials *config.Credentials) (*internal.ReleasesResponse, error) {
+func (rf *OCIReleasesFetcher) GetReleases(pkg string, credentials *config.Credentials) (*internal.ReleasesResponse, error) {
 	parts := regexp.MustCompile("[:/]").Split(pkg, -1)
 	if len(parts) != 2 {
 		return nil, &ReleasesFetcherError{Err: fmt.Errorf("expected two parts, separated by '/' in OCI package, got %s", pkg), IsParameterError: true}

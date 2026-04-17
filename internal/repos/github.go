@@ -110,7 +110,7 @@ type fullGitHubReleasesResponse []struct {
 	DiscussionURL string `json:"discussion_url,omitempty"`
 }
 
-func (rf GitHubReleasesFetcher) GetReleases(pkg string, credentials *config.Credentials) (*internal.ReleasesResponse, error) {
+func (rf *GitHubReleasesFetcher) GetReleases(pkg string, credentials *config.Credentials) (*internal.ReleasesResponse, error) {
 	parts := regexp.MustCompile("[:/]").Split(pkg, -1)
 	if len(parts) != 2 {
 		return nil, &ReleasesFetcherError{Err: fmt.Errorf("expected two parts, separated by '/' in GitHub releases package, got %s", pkg), IsParameterError: true}

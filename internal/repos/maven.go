@@ -26,7 +26,7 @@ type fullSonatypeResponse struct {
 	} `json:"response"`
 }
 
-func (rf MavenReleasesFetcher) GetReleases(pkg string, credentials *config.Credentials) (*internal.ReleasesResponse, error) {
+func (rf *MavenReleasesFetcher) GetReleases(pkg string, credentials *config.Credentials) (*internal.ReleasesResponse, error) {
 	parts := regexp.MustCompile("[:/]").Split(pkg, -1)
 	if len(parts) != 2 {
 		return nil, &ReleasesFetcherError{Err: fmt.Errorf("expected two parts, separated by ':' or '/' in maven package, got %s", pkg), IsParameterError: true}
