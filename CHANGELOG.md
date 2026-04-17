@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/sverrehu/versions/compare/v0.1.1...v0.1.2) (2026-04-17)
+
+
+### Bug Fixes
+
+* remove incorrect sourceDirectory ([#47](https://github.com/sverrehu/versions/issues/47)) ([3273c37](https://github.com/sverrehu/versions/commit/3273c3790944bbff609afbe85694b5da0aeb16fe))
+
 ## [0.1.1](https://github.com/sverrehu/versions/compare/v0.1.0...v0.1.1) (2026-04-17)
 
 
