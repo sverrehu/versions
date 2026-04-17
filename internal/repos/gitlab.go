@@ -121,7 +121,8 @@ func (rf *GitLabReleasesFetcher) getReleases(owner, repo string) (*internal.Rele
 }
 
 func (rf *GitLabReleasesFetcher) getSearchUrl(owner, repo string) string {
-	return "https://gitlab.com/api/v4/projects/" + url.PathEscape(owner+"/"+repo) + "/releases?page=1&per_page=100"
+	return fmt.Sprintf("https://gitlab.com/api/v4/projects/%s/releases?page=1&per_page=%d",
+		url.PathEscape(owner+"/"+repo), rf.perPage)
 }
 
 func (rf *GitLabReleasesFetcher) translateResponse(jsonResponse, owner, repo string) (*internal.ReleasesResponse, error) {

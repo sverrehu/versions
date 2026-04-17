@@ -59,7 +59,8 @@ func (rf *MavenReleasesFetcher) getReleases(groupId, artifactId string) (*intern
 }
 
 func (rf *MavenReleasesFetcher) getSearchUrl(groupId, artifactId string) string {
-	return "https://central.sonatype.com/solrsearch/select?wt=json&q=g:" + url.QueryEscape(groupId) + "+AND+a:" + url.QueryEscape(artifactId) + "&sort=v+desc"
+	return fmt.Sprintf("https://central.sonatype.com/solrsearch/select?wt=json&q=g:%s+AND+a:%s&sort=v+desc",
+		url.QueryEscape(groupId), url.QueryEscape(artifactId))
 }
 
 func (rf *MavenReleasesFetcher) translateResponse(jsonResponse string) (*internal.ReleasesResponse, error) {

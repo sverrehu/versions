@@ -17,6 +17,8 @@ import (
 
 type OCIReleasesFetcher struct {
 	ReleasesFetcher
+	firstPage   int
+	perPage     int
 	credentials *config.Credentials
 }
 
@@ -58,6 +60,8 @@ type fullOCIResponse struct {
 
 func NewOCIReleasesFetcher(credentials *config.Credentials) *OCIReleasesFetcher {
 	return &OCIReleasesFetcher{
+		firstPage:   1,
+		perPage:     100,
 		credentials: credentials,
 	}
 }
@@ -87,7 +91,8 @@ func (rf *OCIReleasesFetcher) getReleases(repo, image string) (*internal.Release
 }
 
 func (rf *OCIReleasesFetcher) getSearchUrl(repo, image string) string {
-	return "https://hub.docker.com/v2/repositories/" + url.PathEscape(repo) + "/" + url.PathEscape(image) + "/tags?page=1&page_size=100"
+	return fmt.Sprintf("https://hub.docker.com/v2/repositories/%s/%s/tags?page=1&page_size=%d",
+		url.PathEscape(repo), url.PathEscape(image), rf.perPage)
 }
 
 func (rf *OCIReleasesFetcher) translateResponse(jsonResponse string) (*internal.ReleasesResponse, error) {

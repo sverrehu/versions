@@ -147,7 +147,8 @@ func (rf *GitHubReleasesFetcher) getReleases(owner, repo string) (*internal.Rele
 }
 
 func (rf *GitHubReleasesFetcher) getSearchUrl(owner, repo string) string {
-	return "https://api.github.com/repos/" + url.PathEscape(owner) + "/" + url.PathEscape(repo) + "/releases?page=1&per_page=100"
+	return fmt.Sprintf("https://api.github.com/repos/%s/%s/releases?page=1&per_page=%d",
+		url.PathEscape(owner), url.PathEscape(repo), rf.perPage)
 }
 
 func (rf *GitHubReleasesFetcher) translateResponse(jsonResponse, owner, repo string) (*internal.ReleasesResponse, error) {
