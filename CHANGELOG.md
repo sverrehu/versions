@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/sverrehu/versions/compare/v0.1.0...v0.1.1) (2026-04-17)
+
+
+### Bug Fixes
+
+* add cacheMinutes to configuration ([4719175](https://github.com/sverrehu/versions/commit/47191757882245c4b47c9d5f6a8e423d7524a0bd))
+
 ## [0.1.0](https://github.com/sverrehu/versions/compare/v0.0.11...v0.1.0) (2026-04-16)
 
 
