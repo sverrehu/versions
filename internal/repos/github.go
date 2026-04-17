@@ -115,11 +115,11 @@ func (rf *GitHubReleasesFetcher) GetReleases(pkg string, credentials *config.Cre
 	if len(parts) != 2 {
 		return nil, &ReleasesFetcherError{Err: fmt.Errorf("expected two parts, separated by '/' in GitHub releases package, got %s", pkg), IsParameterError: true}
 	}
-	return rf.getGitHubReleases(parts[0], parts[1], credentials)
+	return rf.getReleases(parts[0], parts[1], credentials)
 }
 
-func (rf *GitHubReleasesFetcher) getGitHubReleases(owner, repo string, credentials *config.Credentials) (*internal.ReleasesResponse, error) {
-	searchUrl := rf.getGitHubSearchUrl(owner, repo)
+func (rf *GitHubReleasesFetcher) getReleases(owner, repo string, credentials *config.Credentials) (*internal.ReleasesResponse, error) {
+	searchUrl := rf.getSearchUrl(owner, repo)
 	body, err := webclient.Get(searchUrl, credentials)
 	if err != nil {
 		return nil, err
@@ -127,18 +127,18 @@ func (rf *GitHubReleasesFetcher) getGitHubReleases(owner, repo string, credentia
 	if body == "" {
 		return &internal.ReleasesResponse{}, nil
 	}
-	releases, err := rf.translateGitHubReleasesResponse(body, owner, repo)
+	releases, err := rf.translateResponse(body, owner, repo)
 	if err != nil {
 		return nil, err
 	}
 	return releases, nil
 }
 
-func (rf *GitHubReleasesFetcher) getGitHubSearchUrl(owner, repo string) string {
+func (rf *GitHubReleasesFetcher) getSearchUrl(owner, repo string) string {
 	return "https://api.github.com/repos/" + url.PathEscape(owner) + "/" + url.PathEscape(repo) + "/releases?page=1&per_page=100"
 }
 
-func (rf *GitHubReleasesFetcher) translateGitHubReleasesResponse(jsonResponse, owner, repo string) (*internal.ReleasesResponse, error) {
+func (rf *GitHubReleasesFetcher) translateResponse(jsonResponse, owner, repo string) (*internal.ReleasesResponse, error) {
 	var resp fullGitHubReleasesResponse
 	err := json.Unmarshal([]byte(jsonResponse), &resp)
 	if err != nil {

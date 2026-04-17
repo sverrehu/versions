@@ -59,11 +59,11 @@ func (rf *OCIReleasesFetcher) GetReleases(pkg string, credentials *config.Creden
 	if len(parts) != 2 {
 		return nil, &ReleasesFetcherError{Err: fmt.Errorf("expected two parts, separated by '/' in OCI package, got %s", pkg), IsParameterError: true}
 	}
-	return rf.getOciReleases(parts[0], parts[1], credentials)
+	return rf.getReleases(parts[0], parts[1], credentials)
 }
 
-func (rf *OCIReleasesFetcher) getOciReleases(repo, image string, credentials *config.Credentials) (*internal.ReleasesResponse, error) {
-	searchUrl := rf.getOciSearchUrl(repo, image)
+func (rf *OCIReleasesFetcher) getReleases(repo, image string, credentials *config.Credentials) (*internal.ReleasesResponse, error) {
+	searchUrl := rf.getSearchUrl(repo, image)
 	body, err := webclient.Get(searchUrl, credentials)
 	if err != nil {
 		return nil, err
@@ -71,18 +71,18 @@ func (rf *OCIReleasesFetcher) getOciReleases(repo, image string, credentials *co
 	if body == "" {
 		return &internal.ReleasesResponse{}, nil
 	}
-	releases, err := rf.translateOCIResponse(body)
+	releases, err := rf.translateResponse(body)
 	if err != nil {
 		return nil, err
 	}
 	return releases, nil
 }
 
-func (rf *OCIReleasesFetcher) getOciSearchUrl(repo, image string) string {
+func (rf *OCIReleasesFetcher) getSearchUrl(repo, image string) string {
 	return "https://hub.docker.com/v2/repositories/" + url.PathEscape(repo) + "/" + url.PathEscape(image) + "/tags?page=1&page_size=100"
 }
 
-func (rf *OCIReleasesFetcher) translateOCIResponse(jsonResponse string) (*internal.ReleasesResponse, error) {
+func (rf *OCIReleasesFetcher) translateResponse(jsonResponse string) (*internal.ReleasesResponse, error) {
 	var resp fullOCIResponse
 	err := json.Unmarshal([]byte(jsonResponse), &resp)
 	if err != nil {

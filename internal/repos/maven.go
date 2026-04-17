@@ -31,11 +31,11 @@ func (rf *MavenReleasesFetcher) GetReleases(pkg string, credentials *config.Cred
 	if len(parts) != 2 {
 		return nil, &ReleasesFetcherError{Err: fmt.Errorf("expected two parts, separated by ':' or '/' in maven package, got %s", pkg), IsParameterError: true}
 	}
-	return rf.getMavenReleases(parts[0], parts[1], credentials)
+	return rf.getReleases(parts[0], parts[1], credentials)
 }
 
-func (rf *MavenReleasesFetcher) getMavenReleases(groupId, artifactId string, credentials *config.Credentials) (*internal.ReleasesResponse, error) {
-	searchUrl := rf.getSonatypeSearchUrl(groupId, artifactId)
+func (rf *MavenReleasesFetcher) getReleases(groupId, artifactId string, credentials *config.Credentials) (*internal.ReleasesResponse, error) {
+	searchUrl := rf.getSearchUrl(groupId, artifactId)
 	body, err := webclient.Get(searchUrl, credentials)
 	if err != nil {
 		return nil, err
@@ -43,18 +43,18 @@ func (rf *MavenReleasesFetcher) getMavenReleases(groupId, artifactId string, cre
 	if body == "" {
 		return &internal.ReleasesResponse{}, nil
 	}
-	releases, err := rf.translateSonatypeResponse(body)
+	releases, err := rf.translateResponse(body)
 	if err != nil {
 		return nil, err
 	}
 	return releases, nil
 }
 
-func (rf *MavenReleasesFetcher) getSonatypeSearchUrl(groupId, artifactId string) string {
+func (rf *MavenReleasesFetcher) getSearchUrl(groupId, artifactId string) string {
 	return "https://central.sonatype.com/solrsearch/select?wt=json&q=g:" + url.QueryEscape(groupId) + "+AND+a:" + url.QueryEscape(artifactId) + "&sort=v+desc"
 }
 
-func (rf *MavenReleasesFetcher) translateSonatypeResponse(jsonResponse string) (*internal.ReleasesResponse, error) {
+func (rf *MavenReleasesFetcher) translateResponse(jsonResponse string) (*internal.ReleasesResponse, error) {
 	var resp fullSonatypeResponse
 	err := json.Unmarshal([]byte(jsonResponse), &resp)
 	if err != nil {
