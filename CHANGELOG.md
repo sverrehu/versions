@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/sverrehu/versions/compare/v0.1.2...v0.1.3) (2026-04-17)
+
+
+### Bug Fixes
+
+* make cacheSize configurable ([24e692f](https://github.com/sverrehu/versions/commit/24e692fc6243929c3d527b2ead4f47542379fb5b))
+
 ## [0.1.2](https://github.com/sverrehu/versions/compare/v0.1.1...v0.1.2) (2026-04-17)
 
 
