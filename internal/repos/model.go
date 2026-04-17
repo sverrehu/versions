@@ -2,11 +2,10 @@ package repos
 
 import (
 	"github.com/sverrehu/gotest/versions/internal"
-	"github.com/sverrehu/gotest/versions/internal/config"
 )
 
 type ReleasesFetcher interface {
-	GetReleases(pkg string, credentials *config.Credentials) (*internal.ReleasesResponse, error)
+	GetReleases(pkg string) (*internal.ReleasesResponse, error)
 }
 
 type ReleasesFetcherError struct {

@@ -16,6 +16,8 @@ import (
 )
 
 type OCIReleasesFetcher struct {
+	ReleasesFetcher
+	credentials *config.Credentials
 }
 
 type fullOCIResponse struct {
@@ -54,17 +56,23 @@ type fullOCIResponse struct {
 	} `json:"results"`
 }
 
-func (rf *OCIReleasesFetcher) GetReleases(pkg string, credentials *config.Credentials) (*internal.ReleasesResponse, error) {
+func NewOCIReleasesFetcher(credentials *config.Credentials) *OCIReleasesFetcher {
+	return &OCIReleasesFetcher{
+		credentials: credentials,
+	}
+}
+
+func (rf *OCIReleasesFetcher) GetReleases(pkg string) (*internal.ReleasesResponse, error) {
 	parts := regexp.MustCompile("[:/]").Split(pkg, -1)
 	if len(parts) != 2 {
 		return nil, &ReleasesFetcherError{Err: fmt.Errorf("expected two parts, separated by '/' in OCI package, got %s", pkg), IsParameterError: true}
 	}
-	return rf.getReleases(parts[0], parts[1], credentials)
+	return rf.getReleases(parts[0], parts[1])
 }
 
-func (rf *OCIReleasesFetcher) getReleases(repo, image string, credentials *config.Credentials) (*internal.ReleasesResponse, error) {
+func (rf *OCIReleasesFetcher) getReleases(repo, image string) (*internal.ReleasesResponse, error) {
 	searchUrl := rf.getSearchUrl(repo, image)
-	body, err := webclient.Get(searchUrl, credentials)
+	body, err := webclient.Get(searchUrl, rf.credentials)
 	if err != nil {
 		return nil, err
 	}

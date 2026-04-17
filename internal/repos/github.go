@@ -16,6 +16,10 @@ import (
 )
 
 type GitHubReleasesFetcher struct {
+	ReleasesFetcher
+	firstPage   int
+	perPage     int
+	credentials *config.Credentials
 }
 
 type fullGitHubReleasesResponse []struct {
@@ -110,17 +114,25 @@ type fullGitHubReleasesResponse []struct {
 	DiscussionURL string `json:"discussion_url,omitempty"`
 }
 
-func (rf *GitHubReleasesFetcher) GetReleases(pkg string, credentials *config.Credentials) (*internal.ReleasesResponse, error) {
+func NewGitHubReleasesFetcher(credentials *config.Credentials) *GitHubReleasesFetcher {
+	return &GitHubReleasesFetcher{
+		firstPage:   1,
+		perPage:     100,
+		credentials: credentials,
+	}
+}
+
+func (rf *GitHubReleasesFetcher) GetReleases(pkg string) (*internal.ReleasesResponse, error) {
 	parts := regexp.MustCompile("[:/]").Split(pkg, -1)
 	if len(parts) != 2 {
 		return nil, &ReleasesFetcherError{Err: fmt.Errorf("expected two parts, separated by '/' in GitHub releases package, got %s", pkg), IsParameterError: true}
 	}
-	return rf.getReleases(parts[0], parts[1], credentials)
+	return rf.getReleases(parts[0], parts[1])
 }
 
-func (rf *GitHubReleasesFetcher) getReleases(owner, repo string, credentials *config.Credentials) (*internal.ReleasesResponse, error) {
+func (rf *GitHubReleasesFetcher) getReleases(owner, repo string) (*internal.ReleasesResponse, error) {
 	searchUrl := rf.getSearchUrl(owner, repo)
-	body, err := webclient.Get(searchUrl, credentials)
+	body, err := webclient.Get(searchUrl, rf.credentials)
 	if err != nil {
 		return nil, err
 	}

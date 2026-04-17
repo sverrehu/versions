@@ -15,6 +15,10 @@ import (
 // sample: https://gitlab.com/api/v4/projects/gitlab-org%2Fgitlab-runner/releases?page=1&per_page=100
 
 type GitLabReleasesFetcher struct {
+	ReleasesFetcher
+	firstPage   int
+	perPage     int
+	credentials *config.Credentials
 }
 
 type fullGitLabReleasesResponse []struct {
@@ -84,17 +88,25 @@ type fullGitLabReleasesResponse []struct {
 	} `json:"_links"`
 }
 
-func (rf *GitLabReleasesFetcher) GetReleases(pkg string, credentials *config.Credentials) (*internal.ReleasesResponse, error) {
+func NewGitLabReleasesFetcher(credentials *config.Credentials) *GitHubReleasesFetcher {
+	return &GitHubReleasesFetcher{
+		firstPage:   1,
+		perPage:     100,
+		credentials: credentials,
+	}
+}
+
+func (rf *GitLabReleasesFetcher) GetReleases(pkg string) (*internal.ReleasesResponse, error) {
 	parts := regexp.MustCompile("[/]").Split(pkg, -1)
 	if len(parts) != 2 {
 		return nil, &ReleasesFetcherError{Err: fmt.Errorf("expected two parts, separated by '/' in GitLab releases package, got %s", pkg), IsParameterError: true}
 	}
-	return rf.getReleases(parts[0], parts[1], credentials)
+	return rf.getReleases(parts[0], parts[1])
 }
 
-func (rf *GitLabReleasesFetcher) getReleases(owner, repo string, credentials *config.Credentials) (*internal.ReleasesResponse, error) {
+func (rf *GitLabReleasesFetcher) getReleases(owner, repo string) (*internal.ReleasesResponse, error) {
 	searchUrl := rf.getSearchUrl(owner, repo)
-	body, err := webclient.Get(searchUrl, credentials)
+	body, err := webclient.Get(searchUrl, rf.credentials)
 	if err != nil {
 		return nil, err
 	}

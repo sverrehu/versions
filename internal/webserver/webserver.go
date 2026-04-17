@@ -25,8 +25,7 @@ var handlers []handler
 var cache *lrumap.LRUMap
 
 type commonReleasesHandler struct {
-	h           repos.ReleasesFetcher
-	credentials *config.Credentials
+	h repos.ReleasesFetcher
 }
 
 func (h *commonReleasesHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -36,7 +35,7 @@ func (h *commonReleasesHandler) ServeHTTP(w http.ResponseWriter, r *http.Request
 	cached := cache.Get(r.URL.Path)
 	if cached == nil {
 		pkg := r.PathValue("package")
-		releases, err := h.h.GetReleases(pkg, h.credentials)
+		releases, err := h.h.GetReleases(pkg)
 		if err != nil {
 			var re *repos.ReleasesFetcherError
 			ok := errors.As(err, &re)
@@ -96,10 +95,12 @@ func setupHandlers(cacheMinutes, cacheSize int) {
 	cache = lrumap.New(cacheSize, time.Duration(cacheMinutes)*time.Minute)
 	gitHubCredentials := config.Cfg().Credentials["github"]
 	gitLabCredentials := config.Cfg().Credentials["gitlab"]
+	mavenCredentials := config.Cfg().Credentials["maven"]
+	dockerHubCredentials := config.Cfg().Credentials["dockerhub"]
 	handlers = []handler{
-		{target: "/maven", handler: &commonReleasesHandler{h: &repos.MavenReleasesFetcher{}}},
-		{target: "/dockerhub", handler: &commonReleasesHandler{h: &repos.OCIReleasesFetcher{}}},
-		{target: "/github-releases", handler: &commonReleasesHandler{h: &repos.GitHubReleasesFetcher{}, credentials: gitHubCredentials}},
-		{target: "/gitlab-releases", handler: &commonReleasesHandler{h: &repos.GitLabReleasesFetcher{}, credentials: gitLabCredentials}},
+		{target: "/github-releases", handler: &commonReleasesHandler{h: repos.NewGitHubReleasesFetcher(gitHubCredentials)}},
+		{target: "/gitlab-releases", handler: &commonReleasesHandler{h: repos.NewGitLabReleasesFetcher(gitLabCredentials)}},
+		{target: "/maven", handler: &commonReleasesHandler{h: repos.NewMavenReleasesFetcher(mavenCredentials)}},
+		{target: "/dockerhub", handler: &commonReleasesHandler{h: repos.NewOCIReleasesFetcher(dockerHubCredentials)}},
 	}
 }

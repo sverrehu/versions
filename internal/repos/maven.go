@@ -15,6 +15,8 @@ import (
 )
 
 type MavenReleasesFetcher struct {
+	ReleasesFetcher
+	credentials *config.Credentials
 }
 
 type fullSonatypeResponse struct {
@@ -26,17 +28,23 @@ type fullSonatypeResponse struct {
 	} `json:"response"`
 }
 
-func (rf *MavenReleasesFetcher) GetReleases(pkg string, credentials *config.Credentials) (*internal.ReleasesResponse, error) {
+func NewMavenReleasesFetcher(credentials *config.Credentials) *MavenReleasesFetcher {
+	return &MavenReleasesFetcher{
+		credentials: credentials,
+	}
+}
+
+func (rf *MavenReleasesFetcher) GetReleases(pkg string) (*internal.ReleasesResponse, error) {
 	parts := regexp.MustCompile("[:/]").Split(pkg, -1)
 	if len(parts) != 2 {
 		return nil, &ReleasesFetcherError{Err: fmt.Errorf("expected two parts, separated by ':' or '/' in maven package, got %s", pkg), IsParameterError: true}
 	}
-	return rf.getReleases(parts[0], parts[1], credentials)
+	return rf.getReleases(parts[0], parts[1])
 }
 
-func (rf *MavenReleasesFetcher) getReleases(groupId, artifactId string, credentials *config.Credentials) (*internal.ReleasesResponse, error) {
+func (rf *MavenReleasesFetcher) getReleases(groupId, artifactId string) (*internal.ReleasesResponse, error) {
 	searchUrl := rf.getSearchUrl(groupId, artifactId)
-	body, err := webclient.Get(searchUrl, credentials)
+	body, err := webclient.Get(searchUrl, rf.credentials)
 	if err != nil {
 		return nil, err
 	}
