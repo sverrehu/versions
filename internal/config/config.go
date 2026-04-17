@@ -27,7 +27,7 @@ type Config struct {
 }
 
 var cfg Config
-var cfgLoaded bool = false
+var cfgLoaded = false
 
 func Cfg() *Config {
 	if !cfgLoaded {
