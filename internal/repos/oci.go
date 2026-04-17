@@ -75,7 +75,7 @@ func (rf *OCIReleasesFetcher) GetReleases(pkg string) (*internal.ReleasesRespons
 }
 
 func (rf *OCIReleasesFetcher) getReleases(repo, image string) (*internal.ReleasesResponse, error) {
-	searchUrl := rf.getSearchUrl(repo, image)
+	searchUrl := rf.getSearchUrl(repo, image, rf.firstPage)
 	body, err := webclient.Get(searchUrl, rf.credentials)
 	if err != nil {
 		return nil, err
@@ -90,9 +90,9 @@ func (rf *OCIReleasesFetcher) getReleases(repo, image string) (*internal.Release
 	return releases, nil
 }
 
-func (rf *OCIReleasesFetcher) getSearchUrl(repo, image string) string {
-	return fmt.Sprintf("https://hub.docker.com/v2/repositories/%s/%s/tags?page=1&page_size=%d",
-		url.PathEscape(repo), url.PathEscape(image), rf.perPage)
+func (rf *OCIReleasesFetcher) getSearchUrl(repo, image string, page int) string {
+	return fmt.Sprintf("https://hub.docker.com/v2/repositories/%s/%s/tags?page=%d&page_size=%d",
+		url.PathEscape(repo), url.PathEscape(image), page, rf.perPage)
 }
 
 func (rf *OCIReleasesFetcher) translateResponse(jsonResponse string) (*internal.ReleasesResponse, error) {

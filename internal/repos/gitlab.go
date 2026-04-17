@@ -105,7 +105,7 @@ func (rf *GitLabReleasesFetcher) GetReleases(pkg string) (*internal.ReleasesResp
 }
 
 func (rf *GitLabReleasesFetcher) getReleases(owner, repo string) (*internal.ReleasesResponse, error) {
-	searchUrl := rf.getSearchUrl(owner, repo)
+	searchUrl := rf.getSearchUrl(owner, repo, rf.firstPage)
 	body, err := webclient.Get(searchUrl, rf.credentials)
 	if err != nil {
 		return nil, err
@@ -120,9 +120,9 @@ func (rf *GitLabReleasesFetcher) getReleases(owner, repo string) (*internal.Rele
 	return releases, nil
 }
 
-func (rf *GitLabReleasesFetcher) getSearchUrl(owner, repo string) string {
-	return fmt.Sprintf("https://gitlab.com/api/v4/projects/%s/releases?page=1&per_page=%d",
-		url.PathEscape(owner+"/"+repo), rf.perPage)
+func (rf *GitLabReleasesFetcher) getSearchUrl(owner, repo string, page int) string {
+	return fmt.Sprintf("https://gitlab.com/api/v4/projects/%s/releases?page=%d1&per_page=%d",
+		url.PathEscape(owner+"/"+repo), page, rf.perPage)
 }
 
 func (rf *GitLabReleasesFetcher) translateResponse(jsonResponse, owner, repo string) (*internal.ReleasesResponse, error) {

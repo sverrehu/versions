@@ -131,7 +131,7 @@ func (rf *GitHubReleasesFetcher) GetReleases(pkg string) (*internal.ReleasesResp
 }
 
 func (rf *GitHubReleasesFetcher) getReleases(owner, repo string) (*internal.ReleasesResponse, error) {
-	searchUrl := rf.getSearchUrl(owner, repo)
+	searchUrl := rf.getSearchUrl(owner, repo, rf.firstPage)
 	body, err := webclient.Get(searchUrl, rf.credentials)
 	if err != nil {
 		return nil, err
@@ -146,9 +146,9 @@ func (rf *GitHubReleasesFetcher) getReleases(owner, repo string) (*internal.Rele
 	return releases, nil
 }
 
-func (rf *GitHubReleasesFetcher) getSearchUrl(owner, repo string) string {
-	return fmt.Sprintf("https://api.github.com/repos/%s/%s/releases?page=1&per_page=%d",
-		url.PathEscape(owner), url.PathEscape(repo), rf.perPage)
+func (rf *GitHubReleasesFetcher) getSearchUrl(owner, repo string, page int) string {
+	return fmt.Sprintf("https://api.github.com/repos/%s/%s/releases?page=%d&per_page=%d",
+		url.PathEscape(owner), url.PathEscape(repo), page, rf.perPage)
 }
 
 func (rf *GitHubReleasesFetcher) translateResponse(jsonResponse, owner, repo string) (*internal.ReleasesResponse, error) {
