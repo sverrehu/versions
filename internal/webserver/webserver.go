@@ -79,21 +79,21 @@ func sendBadRequest(w http.ResponseWriter, message string, url *url.URL) {
 	}
 }
 
-func Run() error {
-	setupHandlers()
+func Run(cacheMinutes int) error {
+	setupHandlers(cacheMinutes)
 	mux := http.NewServeMux()
 	for _, h := range handlers {
 		log.Printf("Adding handler for %s\n", h.target)
 		mux.Handle(h.target+"/{package...}", h.handler)
 	}
 	port := config.Cfg().WebServer.Port
-	log.Printf("Starting server at port %d\n", port)
+	log.Printf("Starting server at port %d, with cache timeout of %d minutes\n", port, cacheMinutes)
 	err := http.ListenAndServe(":"+strconv.Itoa(port), mux)
 	return err
 }
 
-func setupHandlers() {
-	cache = lrumap.New(3000, 2*time.Hour)
+func setupHandlers(cacheMinutes int) {
+	cache = lrumap.New(3000, time.Duration(cacheMinutes)*time.Minute)
 	gitHubCredentials := config.Cfg().Credentials["github"]
 	gitLabCredentials := config.Cfg().Credentials["gitlab"]
 	handlers = []handler{

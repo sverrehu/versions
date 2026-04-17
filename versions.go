@@ -29,7 +29,7 @@ func main() {
 	if port > 0 {
 		config.Cfg().WebServer.Port = port
 	}
-	err = webserver.Run()
+	err = webserver.Run(config.Cfg().WebServer.CacheMinutes)
 	if err != nil {
 		panic(err)
 	}

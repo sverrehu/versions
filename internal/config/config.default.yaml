@@ -1,3 +1,4 @@
 ---
 webServer:
   port: 8086
+  cacheMinutes: 30
