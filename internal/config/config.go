@@ -13,6 +13,7 @@ var defaultConfig []byte
 type WebServer struct {
 	Port         int `yaml:"port"`
 	CacheMinutes int `yaml:"cacheMinutes"`
+	CacheSize    int `yaml:"cacheSize"`
 }
 
 type Credentials struct {

@@ -26,10 +26,11 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	webServerCfg := &config.Cfg().WebServer
 	if port > 0 {
-		config.Cfg().WebServer.Port = port
+		webServerCfg.Port = port
 	}
-	err = webserver.Run(config.Cfg().WebServer.CacheMinutes)
+	err = webserver.Run(webServerCfg.CacheMinutes, webServerCfg.CacheSize)
 	if err != nil {
 		panic(err)
 	}
