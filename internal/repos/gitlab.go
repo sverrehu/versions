@@ -88,8 +88,8 @@ type fullGitLabReleasesResponse []struct {
 	} `json:"_links"`
 }
 
-func NewGitLabReleasesFetcher(credentials *config.Credentials) *GitHubReleasesFetcher {
-	return &GitHubReleasesFetcher{
+func NewGitLabReleasesFetcher(credentials *config.Credentials) *GitLabReleasesFetcher {
+	return &GitLabReleasesFetcher{
 		firstPage:   1,
 		perPage:     100,
 		credentials: credentials,
