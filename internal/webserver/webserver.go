@@ -71,7 +71,8 @@ func (h *commonReleasesHandler) ServeHTTP(w http.ResponseWriter, r *http.Request
 
 func (h *indexHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
-	contents := strings.ReplaceAll(indexPage, "PREFIX", r.URL.Path)
+	prefix := strings.TrimRight(r.URL.Path, "/")
+	contents := strings.ReplaceAll(indexPage, "PREFIX", prefix)
 	_, err := w.Write([]byte(contents))
 	if err != nil {
 		log.Printf("error writing response for url: %v: %v", r.URL, err.Error())
