@@ -16,14 +16,11 @@ If this proxy runs alongside Artifactory (i.e. on the host with access to the In
 
 In semi-prioritized order:
 
-* ~~Support authentication with the data sources, in order to enable more queries (avoid rate limiting for anonymous).~~ (done for GitHub/GitLab)
 * Gracefully handle error codes from downstream.
   Currently, everything bad from the backends lead to 500.
   Need to report back on rate limiting errors, at least.
 * Support pagination for data sources; currently only the first page is parsed.
-* ~~Use native Renovate format for output.~~ (done)
 * Persistent and perhaps shared cache.
-* ~~Where applicable, include release notes.~~ (done for existing data sources)
 * Add more data sources.
   This is the last item because I think that when everything above is in place, it will be possible to see what can be extracted to avoid too much duplicate code.
   There is duplication already, but it is my intention to clean it up, eventually.
