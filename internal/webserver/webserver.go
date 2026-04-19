@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/sverrehu/gotest/versions/internal/config"
@@ -17,7 +16,7 @@ import (
 )
 
 //go:embed index.html
-var indexPage string
+var indexPage []byte
 
 type handler struct {
 	target  string
@@ -71,9 +70,7 @@ func (h *commonReleasesHandler) ServeHTTP(w http.ResponseWriter, r *http.Request
 
 func (h *indexHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
-	prefix := strings.TrimRight(r.URL.Path, "/")
-	contents := strings.ReplaceAll(indexPage, "PREFIX", prefix)
-	_, err := w.Write([]byte(contents))
+	_, err := w.Write(indexPage)
 	if err != nil {
 		log.Printf("error writing response for url: %v: %v", r.URL, err.Error())
 	}
