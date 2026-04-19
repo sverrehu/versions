@@ -121,7 +121,7 @@ func (rf *GitLabReleasesFetcher) getReleases(owner, repo string) (*internal.Rele
 }
 
 func (rf *GitLabReleasesFetcher) getSearchUrl(owner, repo string, page int) string {
-	return fmt.Sprintf("https://gitlab.com/api/v4/projects/%s/releases?page=%d1&per_page=%d",
+	return fmt.Sprintf("https://gitlab.com/api/v4/projects/%s/releases?page=%d&per_page=%d",
 		url.PathEscape(owner+"/"+repo), page, rf.perPage)
 }
 
