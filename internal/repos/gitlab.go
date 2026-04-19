@@ -104,45 +104,54 @@ func (rf *GitLabReleasesFetcher) GetReleases(pkg string) (*internal.ReleasesResp
 	return rf.getReleases(parts[0], parts[1])
 }
 
-func (rf *GitLabReleasesFetcher) getReleases(owner, repo string) (*internal.ReleasesResponse, error) {
-	searchUrl := rf.getSearchUrl(owner, repo, rf.firstPage)
-	body, err := webclient.Get(searchUrl, rf.credentials)
-	if err != nil {
-		return nil, err
-	}
-	if body == "" {
-		return &internal.ReleasesResponse{}, nil
-	}
-	releases, err := rf.translateResponse(body, owner, repo)
-	if err != nil {
-		return nil, err
-	}
-	return releases, nil
-}
-
 func (rf *GitLabReleasesFetcher) getSearchUrl(owner, repo string, page int) string {
 	return fmt.Sprintf("https://gitlab.com/api/v4/projects/%s/releases?page=%d&per_page=%d",
 		url.PathEscape(owner+"/"+repo), page, rf.perPage)
 }
 
-func (rf *GitLabReleasesFetcher) translateResponse(jsonResponse, owner, repo string) (*internal.ReleasesResponse, error) {
+func (rf *GitLabReleasesFetcher) getReleases(owner, repo string) (*internal.ReleasesResponse, error) {
+	sourceURL := "https://gitlab.com/" + url.PathEscape(owner) + "/" + url.PathEscape(repo)
+	releasesResponse := internal.ReleasesResponse{
+		Releases:  make([]internal.Release, 0),
+		SourceURL: &sourceURL,
+	}
+	page := rf.firstPage
+	for {
+		searchUrl := rf.getSearchUrl(owner, repo, page)
+		body, err := webclient.Get(searchUrl, rf.credentials)
+		if err != nil {
+			return nil, err
+		}
+		if body == "" {
+			break
+		}
+		releases, err := rf.extractReleases(body)
+		if err != nil {
+			return nil, err
+		}
+		if len(releases) == 0 {
+			break
+		}
+		releasesResponse.Releases = append(releasesResponse.Releases, releases...)
+		page++
+	}
+	return &releasesResponse, nil
+}
+
+func (rf *GitLabReleasesFetcher) extractReleases(jsonResponse string) ([]internal.Release, error) {
 	var resp fullGitLabReleasesResponse
 	err := json.Unmarshal([]byte(jsonResponse), &resp)
 	if err != nil {
 		return nil, err
 	}
-	sourceURL := "https://gitlab.com/" + url.PathEscape(owner) + "/" + url.PathEscape(repo)
-	releases := internal.ReleasesResponse{
-		Releases:  make([]internal.Release, 0, len(resp)),
-		SourceURL: &sourceURL,
-	}
+	releases := make([]internal.Release, 0, len(resp))
 	for _, result := range resp {
 		release := internal.Release{
 			Version:          result.TagName,
 			ReleaseTimestamp: result.ReleasedAt,
 			ChangelogURL:     &result.Links.Self,
 		}
-		releases.Releases = append(releases.Releases, release)
+		releases = append(releases, release)
 	}
-	return &releases, nil
+	return releases, nil
 }

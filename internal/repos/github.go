@@ -1,6 +1,5 @@
 package repos
 
-// TODO: this will only fetch the 100 most recent releases.
 // Sample: https://api.github.com/repos/prometheus/prometheus/releases?page=1&per_page=100
 
 import (
@@ -130,45 +129,54 @@ func (rf *GitHubReleasesFetcher) GetReleases(pkg string) (*internal.ReleasesResp
 	return rf.getReleases(parts[0], parts[1])
 }
 
-func (rf *GitHubReleasesFetcher) getReleases(owner, repo string) (*internal.ReleasesResponse, error) {
-	searchUrl := rf.getSearchUrl(owner, repo, rf.firstPage)
-	body, err := webclient.Get(searchUrl, rf.credentials)
-	if err != nil {
-		return nil, err
-	}
-	if body == "" {
-		return &internal.ReleasesResponse{}, nil
-	}
-	releases, err := rf.translateResponse(body, owner, repo)
-	if err != nil {
-		return nil, err
-	}
-	return releases, nil
-}
-
 func (rf *GitHubReleasesFetcher) getSearchUrl(owner, repo string, page int) string {
 	return fmt.Sprintf("https://api.github.com/repos/%s/%s/releases?page=%d&per_page=%d",
 		url.PathEscape(owner), url.PathEscape(repo), page, rf.perPage)
 }
 
-func (rf *GitHubReleasesFetcher) translateResponse(jsonResponse, owner, repo string) (*internal.ReleasesResponse, error) {
+func (rf *GitHubReleasesFetcher) getReleases(owner, repo string) (*internal.ReleasesResponse, error) {
+	sourceURL := "https://github.com/" + url.PathEscape(owner) + "/" + url.PathEscape(repo)
+	releasesResponse := internal.ReleasesResponse{
+		Releases:  make([]internal.Release, 0),
+		SourceURL: &sourceURL,
+	}
+	page := rf.firstPage
+	for {
+		searchUrl := rf.getSearchUrl(owner, repo, page)
+		body, err := webclient.Get(searchUrl, rf.credentials)
+		if err != nil {
+			return nil, err
+		}
+		if body == "" {
+			break
+		}
+		releases, err := rf.extractReleases(body)
+		if err != nil {
+			return nil, err
+		}
+		if len(releases) == 0 {
+			break
+		}
+		releasesResponse.Releases = append(releasesResponse.Releases, releases...)
+		page++
+	}
+	return &releasesResponse, nil
+}
+
+func (rf *GitHubReleasesFetcher) extractReleases(jsonResponse string) ([]internal.Release, error) {
 	var resp fullGitHubReleasesResponse
 	err := json.Unmarshal([]byte(jsonResponse), &resp)
 	if err != nil {
 		return nil, err
 	}
-	sourceURL := "https://github.com/" + url.PathEscape(owner) + "/" + url.PathEscape(repo)
-	releases := internal.ReleasesResponse{
-		Releases:  make([]internal.Release, 0, len(resp)),
-		SourceURL: &sourceURL,
-	}
+	releases := make([]internal.Release, 0, len(resp))
 	for _, result := range resp {
 		release := internal.Release{
 			Version:          result.TagName,
 			ReleaseTimestamp: result.PublishedAt,
 			ChangelogURL:     &result.HTMLURL,
 		}
-		releases.Releases = append(releases.Releases, release)
+		releases = append(releases, release)
 	}
-	return &releases, nil
+	return releases, nil
 }
