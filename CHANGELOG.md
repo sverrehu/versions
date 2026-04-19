@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.9](https://github.com/sverrehu/versions/compare/v0.1.8...v0.1.9) (2026-04-19)
+
+
+### Bug Fixes
+
+* support paginated API responses ([#55](https://github.com/sverrehu/versions/issues/55)) ([737fe10](https://github.com/sverrehu/versions/commit/737fe1093fe9d5e1412328357bdfc5e50e806ca2))
+
 ## [0.1.8](https://github.com/sverrehu/versions/compare/v0.1.7...v0.1.8) (2026-04-19)
 
 
