@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.7](https://github.com/sverrehu/versions/compare/v0.1.6...v0.1.7) (2026-04-19)
+
+
+### Bug Fixes
+
+* ditch prefix entirely in index page ([bdaa0f6](https://github.com/sverrehu/versions/commit/bdaa0f63889aeda507c41d90cd5c113b6dc3af8b))
+
 ## [0.1.6](https://github.com/sverrehu/versions/compare/v0.1.5...v0.1.6) (2026-04-19)
 
 
