@@ -1,6 +1,5 @@
 package repos
 
-// TODO: this will only fetch the 100 most recent releases.
 // Sample: https://hub.docker.com/v2/repositories/library/ubuntu/tags?page=1&page_size=100
 
 import (
@@ -74,42 +73,51 @@ func (rf *OCIReleasesFetcher) GetReleases(pkg string) (*internal.ReleasesRespons
 	return rf.getReleases(parts[0], parts[1])
 }
 
-func (rf *OCIReleasesFetcher) getReleases(repo, image string) (*internal.ReleasesResponse, error) {
-	searchUrl := rf.getSearchUrl(repo, image, rf.firstPage)
-	body, err := webclient.Get(searchUrl, rf.credentials)
-	if err != nil {
-		return nil, err
-	}
-	if body == "" {
-		return &internal.ReleasesResponse{}, nil
-	}
-	releases, err := rf.translateResponse(body)
-	if err != nil {
-		return nil, err
-	}
-	return releases, nil
-}
-
 func (rf *OCIReleasesFetcher) getSearchUrl(repo, image string, page int) string {
 	return fmt.Sprintf("https://hub.docker.com/v2/repositories/%s/%s/tags?page=%d&page_size=%d",
 		url.PathEscape(repo), url.PathEscape(image), page, rf.perPage)
 }
 
-func (rf *OCIReleasesFetcher) translateResponse(jsonResponse string) (*internal.ReleasesResponse, error) {
+func (rf *OCIReleasesFetcher) getReleases(owner, repo string) (*internal.ReleasesResponse, error) {
+	releasesResponse := internal.ReleasesResponse{
+		Releases: make([]internal.Release, 0),
+	}
+	page := rf.firstPage
+	for {
+		searchUrl := rf.getSearchUrl(owner, repo, page)
+		body, err := webclient.Get(searchUrl, rf.credentials)
+		if err != nil {
+			return nil, err
+		}
+		if body == "" {
+			break
+		}
+		releases, err := rf.extractReleases(body)
+		if err != nil {
+			return nil, err
+		}
+		if len(releases) == 0 {
+			break
+		}
+		releasesResponse.Releases = append(releasesResponse.Releases, releases...)
+		page++
+	}
+	return &releasesResponse, nil
+}
+
+func (rf *OCIReleasesFetcher) extractReleases(jsonResponse string) ([]internal.Release, error) {
 	var resp fullOCIResponse
 	err := json.Unmarshal([]byte(jsonResponse), &resp)
 	if err != nil {
 		return nil, err
 	}
-	releases := internal.ReleasesResponse{
-		Releases: make([]internal.Release, 0, resp.Count),
-	}
+	releases := make([]internal.Release, 0, resp.Count)
 	for _, result := range resp.Results {
 		release := internal.Release{
 			Version:          result.Name,
 			ReleaseTimestamp: result.TagLastPushed,
 		}
-		releases.Releases = append(releases.Releases, release)
+		releases = append(releases, release)
 	}
-	return &releases, nil
+	return releases, nil
 }
