@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.5](https://github.com/sverrehu/versions/compare/v0.1.4...v0.1.5) (2026-04-19)
+
+
+### Bug Fixes
+
+* allow url prefix on index page ([2e3f94e](https://github.com/sverrehu/versions/commit/2e3f94eb4af3c4e6164ad83209bf43a15ec4f4f9))
+
 ## [0.1.4](https://github.com/sverrehu/versions/compare/v0.1.3...v0.1.4) (2026-04-17)
 
 
