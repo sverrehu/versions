@@ -8,7 +8,7 @@ Mainly created to overcome the shortcomings of the [Artifactory](https://jfrog.c
 Unfortunately, Artifactory has proven to be quite bad at providing what Renovate needs to suggest updates in our internal Git repo.
 
 * New versions are not reported for GitHub and GitLab artifacts, unless someone already downloaded.
-* Release timestamps are not reported for Dockerhub images, making it impossible to use Renovate's [quarantine feature](https://docs.renovatebot.com/key-concepts/minimum-release-age/).
+* Release timestamps are not reported for Docker Hub images, making it impossible to use Renovate's [quarantine feature](https://docs.renovatebot.com/key-concepts/minimum-release-age/).
 
 If this proxy runs alongside Artifactory (i.e. on the host with access to the Internet), and Renovate is properly configured to use it via [custom data sources](https://docs.renovatebot.com/modules/datasource/custom/), these problems will be solved.
 
