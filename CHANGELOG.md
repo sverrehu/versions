@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.6](https://github.com/sverrehu/versions/compare/v0.1.5...v0.1.6) (2026-04-19)
+
+
+### Bug Fixes
+
+* handle prefix better for index page ([e2f3001](https://github.com/sverrehu/versions/commit/e2f3001b30433acf9382b3c5bdb00a5d8fb999a1))
+
 ## [0.1.5](https://github.com/sverrehu/versions/compare/v0.1.4...v0.1.5) (2026-04-19)
 
 
