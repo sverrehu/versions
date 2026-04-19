@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.8](https://github.com/sverrehu/versions/compare/v0.1.7...v0.1.8) (2026-04-19)
+
+
+### Bug Fixes
+
+* remove leftover digit from format string ([9d1d371](https://github.com/sverrehu/versions/commit/9d1d371f813616e5bfa422dfe29b74e22f7bfd3f))
+
 ## [0.1.7](https://github.com/sverrehu/versions/compare/v0.1.6...v0.1.7) (2026-04-19)
 
 
