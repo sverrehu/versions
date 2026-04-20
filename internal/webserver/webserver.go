@@ -60,7 +60,7 @@ func (h *commonReleasesHandler) ServeHTTP(w http.ResponseWriter, r *http.Request
 		cache.Put(r.URL.Path, jsonReleases)
 	} else {
 		log.Printf("cache hit for %s", r.URL.Path)
-		jsonReleases = cache.Get(r.URL.Path).([]byte)
+		jsonReleases = cached.([]byte)
 	}
 	_, err := w.Write(jsonReleases)
 	if err != nil {
