@@ -1,7 +1,12 @@
 ---
 webServer:
   port: 8086
-  cacheMinutes: 30
-  cacheSize: 3000
 state:
   filename: ""
+  cache:
+    releases:
+      cacheMinutes: 30
+      cacheSize: 3000
+    commitTimestamps:
+      cacheMinutes: 86400 # 60 days
+      cacheSize: 10000

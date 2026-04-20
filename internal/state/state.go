@@ -11,10 +11,11 @@ import (
 )
 
 type State struct {
-	Cache       *lrumap.LRUMap
-	CommitDates *lrumap.LRUMap
-	changed     bool
-	mutex       sync.Mutex
+	// NOTE! This struct is gob persisted; do not change the exported names!
+	Cache            *lrumap.LRUMap
+	CommitTimestamps *lrumap.LRUMap
+	changed          bool
+	mutex            sync.Mutex
 }
 
 var state *State
@@ -24,13 +25,16 @@ func init() {
 	gob.Register(time.Time{})
 }
 
-func InitState(stateFile string, cacheMinutes, cacheSize int) {
+func InitState(stateFile string, responseCacheMinutes, responseCacheSize, commitTimestampCacheMinutes, commitTimestampCacheSize int) {
 	state = &State{
-		Cache:       lrumap.New(cacheSize, time.Duration(cacheMinutes)*time.Minute),
-		CommitDates: lrumap.New(10000, 60*24*time.Hour),
+		Cache:            lrumap.New(responseCacheSize, time.Duration(responseCacheMinutes)*time.Minute),
+		CommitTimestamps: lrumap.New(commitTimestampCacheSize, time.Duration(commitTimestampCacheMinutes)*time.Minute),
 	}
 	stateFilename = stateFile
+	log.Printf("state store set up with response cache minutes: %d, size: %d, and commit timestamp cache minutes: %d, size: %d",
+		responseCacheMinutes, responseCacheSize, commitTimestampCacheMinutes, commitTimestampCacheSize)
 	if len(stateFilename) != 0 {
+		log.Printf("state will be persisted to: %s", stateFilename)
 		err := LoadState()
 		if err != nil {
 			log.Printf("error loading state, using empty state: %v", err)
@@ -98,14 +102,14 @@ func GetCachedResponse(path string) []byte {
 func PutCommitTimestamp(datasource, commitId string, timestamp time.Time) {
 	state.mutex.Lock()
 	defer state.mutex.Unlock()
-	state.CommitDates.Put(toCommitTimestampKey(datasource, commitId), timestamp)
+	state.CommitTimestamps.Put(toCommitTimestampKey(datasource, commitId), timestamp)
 	state.changed = true
 }
 
 func GetCommitTimestamp(datasource, commitId string) *time.Time {
 	state.mutex.Lock()
 	defer state.mutex.Unlock()
-	value := state.CommitDates.Get(toCommitTimestampKey(datasource, commitId))
+	value := state.CommitTimestamps.Get(toCommitTimestampKey(datasource, commitId))
 	if value == nil {
 		return nil
 	}
