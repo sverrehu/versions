@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.12](https://github.com/sverrehu/versions/compare/v0.1.11...v0.1.12) (2026-04-20)
+
+
+### Bug Fixes
+
+* add support for github-tags ([b2b35c3](https://github.com/sverrehu/versions/commit/b2b35c39fb1350cdb32e20e312b07e91ba4753d3))
+
 ## [0.1.11](https://github.com/sverrehu/versions/compare/v0.1.10...v0.1.11) (2026-04-20)
 
 
