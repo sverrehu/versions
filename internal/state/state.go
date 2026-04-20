@@ -31,16 +31,21 @@ func InitState(stateFile string, responseCacheMinutes, responseCacheSize, commit
 		CommitTimestamps: lrumap.New(commitTimestampCacheSize, time.Duration(commitTimestampCacheMinutes)*time.Minute),
 	}
 	stateFilename = stateFile
-	log.Printf("state store set up with response cache minutes: %d, size: %d, and commit timestamp cache minutes: %d, size: %d",
-		responseCacheMinutes, responseCacheSize, commitTimestampCacheMinutes, commitTimestampCacheSize)
 	if len(stateFilename) != 0 {
 		log.Printf("state will be persisted to: %s", stateFilename)
 		err := LoadState()
 		if err != nil {
 			log.Printf("error loading state, using empty state: %v", err)
 		}
+		// reset cache settings, in case current settings differ from what was persisted
+		state.Cache.MaxSize = responseCacheSize
+		state.Cache.TTL = time.Duration(responseCacheMinutes) * time.Minute
+		state.CommitTimestamps.MaxSize = commitTimestampCacheSize
+		state.CommitTimestamps.TTL = time.Duration(commitTimestampCacheMinutes) * time.Minute
 		go periodicStateSaveTask()
 	}
+	log.Printf("state store set up with response cache minutes: %d, size: %d, and commit timestamp cache minutes: %d, size: %d",
+		int(state.Cache.TTL.Minutes()), state.Cache.MaxSize, int(state.CommitTimestamps.TTL.Minutes()), state.CommitTimestamps.MaxSize)
 }
 
 func SaveState() error {
