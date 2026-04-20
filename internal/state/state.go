@@ -20,6 +20,10 @@ type State struct {
 var state *State
 var stateFilename string
 
+func init() {
+	gob.Register(time.Time{})
+}
+
 func InitState(stateFile string, cacheMinutes, cacheSize int) {
 	state = &State{
 		Cache:       lrumap.New(cacheSize, time.Duration(cacheMinutes)*time.Minute),
