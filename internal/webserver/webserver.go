@@ -88,7 +88,7 @@ func sendBadRequest(w http.ResponseWriter, message string, url *url.URL) {
 	}
 }
 
-func Run(cacheMinutes, cacheSize int) error {
+func Run(port int) error {
 	setupHandlers()
 	mux := http.NewServeMux()
 	for _, h := range handlers {
@@ -96,8 +96,7 @@ func Run(cacheMinutes, cacheSize int) error {
 		mux.Handle(h.target+"/{package...}", h.handler)
 	}
 	mux.Handle("/", &indexHandler{})
-	port := config.Cfg().WebServer.Port
-	log.Printf("Starting server at port %d, with cache timeout of %d minutes and cache size of %d\n", port, cacheMinutes, cacheSize)
+	log.Printf("Starting server at port %d", port)
 	err := http.ListenAndServe(":"+strconv.Itoa(port), mux)
 	return err
 }

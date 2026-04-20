@@ -29,11 +29,13 @@ func main() {
 	}
 	stateCfg := &config.Cfg().State
 	webServerCfg := &config.Cfg().WebServer
-	state.InitState(stateCfg.Filename, webServerCfg.CacheMinutes, webServerCfg.CacheSize)
-	if port > 0 {
-		webServerCfg.Port = port
+	state.InitState(stateCfg.Filename,
+		stateCfg.Cache.Releases.CacheMinutes, stateCfg.Cache.Releases.CacheSize,
+		stateCfg.Cache.CommitTimestamps.CacheMinutes, stateCfg.Cache.CommitTimestamps.CacheSize)
+	if port < 0 {
+		port = webServerCfg.Port
 	}
-	err = webserver.Run(webServerCfg.CacheMinutes, webServerCfg.CacheSize)
+	err = webserver.Run(port)
 	if err != nil {
 		panic(err)
 	}

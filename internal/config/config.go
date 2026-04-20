@@ -18,8 +18,18 @@ type WebServer struct {
 
 type State struct {
 	Filename string `yaml:"filename"`
+	Cache    Cache  `yaml:"cache"`
 }
 
+type Cache struct {
+	Releases         CacheSettings `yaml:"releases"`
+	CommitTimestamps CacheSettings `yaml:"commitTimestamps"`
+}
+
+type CacheSettings struct {
+	CacheMinutes int `yaml:"cacheMinutes"`
+	CacheSize    int `yaml:"cacheSize"`
+}
 type Credentials struct {
 	UserName string `yaml:"userName,omitempty"`
 	Password string `yaml:"password,omitempty"`
@@ -28,8 +38,8 @@ type Credentials struct {
 
 type Config struct {
 	WebServer   WebServer               `yaml:"webServer"`
-	Credentials map[string]*Credentials `yaml:"credentials"`
 	State       State                   `yaml:"state"`
+	Credentials map[string]*Credentials `yaml:"credentials"`
 }
 
 var cfg Config
