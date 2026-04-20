@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.11](https://github.com/sverrehu/versions/compare/v0.1.10...v0.1.11) (2026-04-20)
+
+
+### Bug Fixes
+
+* persist state (cache) ([#61](https://github.com/sverrehu/versions/issues/61)) ([bea5e51](https://github.com/sverrehu/versions/commit/bea5e51fdd92642614298f9d1346471719e763dc))
+
 ## [0.1.10](https://github.com/sverrehu/versions/compare/v0.1.9...v0.1.10) (2026-04-20)
 
 
