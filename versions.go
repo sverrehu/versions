@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/sverrehu/gotest/versions/internal/config"
+	"github.com/sverrehu/gotest/versions/internal/state"
 	"github.com/sverrehu/gotest/versions/internal/webserver"
 	"github.com/sverrehu/goutils/getopt"
 )
@@ -26,7 +27,9 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	stateCfg := &config.Cfg().State
 	webServerCfg := &config.Cfg().WebServer
+	state.InitState(stateCfg.Filename, webServerCfg.CacheMinutes, webServerCfg.CacheSize)
 	if port > 0 {
 		webServerCfg.Port = port
 	}

@@ -8,11 +8,10 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
-	"time"
 
 	"github.com/sverrehu/gotest/versions/internal/config"
 	"github.com/sverrehu/gotest/versions/internal/repos"
-	"github.com/sverrehu/goutils/lrumap"
+	"github.com/sverrehu/gotest/versions/internal/state"
 )
 
 //go:embed index.html
@@ -25,9 +24,6 @@ type handler struct {
 
 var handlers []handler
 
-// shared cache used by all handler instances
-var cache *lrumap.LRUMap
-
 type commonReleasesHandler struct {
 	h repos.ReleasesFetcher
 }
@@ -38,7 +34,7 @@ func (h *commonReleasesHandler) ServeHTTP(w http.ResponseWriter, r *http.Request
 	log.Printf("request: %s %s", r.Method, r.URL)
 	w.Header().Set("Content-Type", "application/json")
 	var jsonReleases []byte = nil
-	cached := cache.Get(r.URL.Path)
+	cached := state.GetCachedResponse(r.URL.Path)
 	if cached == nil {
 		pkg := r.PathValue("package")
 		releases, err := h.h.GetReleases(pkg)
@@ -57,10 +53,10 @@ func (h *commonReleasesHandler) ServeHTTP(w http.ResponseWriter, r *http.Request
 			sendInternalServerError(w, err, r.URL)
 			return
 		}
-		cache.Put(r.URL.Path, jsonReleases)
+		state.PutCachedResponse(r.URL.Path, jsonReleases)
 	} else {
 		log.Printf("cache hit for %s", r.URL.Path)
-		jsonReleases = cached.([]byte)
+		jsonReleases = cached
 	}
 	_, err := w.Write(jsonReleases)
 	if err != nil {
@@ -93,7 +89,7 @@ func sendBadRequest(w http.ResponseWriter, message string, url *url.URL) {
 }
 
 func Run(cacheMinutes, cacheSize int) error {
-	setupHandlers(cacheMinutes, cacheSize)
+	setupHandlers()
 	mux := http.NewServeMux()
 	for _, h := range handlers {
 		log.Printf("Adding handler for %s\n", h.target)
@@ -106,8 +102,7 @@ func Run(cacheMinutes, cacheSize int) error {
 	return err
 }
 
-func setupHandlers(cacheMinutes, cacheSize int) {
-	cache = lrumap.New(cacheSize, time.Duration(cacheMinutes)*time.Minute)
+func setupHandlers() {
 	gitHubCredentials := config.Cfg().Credentials["github"]
 	gitLabCredentials := config.Cfg().Credentials["gitlab"]
 	mavenCredentials := config.Cfg().Credentials["maven"]

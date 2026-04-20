@@ -16,6 +16,10 @@ type WebServer struct {
 	CacheSize    int `yaml:"cacheSize"`
 }
 
+type State struct {
+	Filename string `yaml:"filename"`
+}
+
 type Credentials struct {
 	UserName string `yaml:"userName,omitempty"`
 	Password string `yaml:"password,omitempty"`
@@ -25,6 +29,7 @@ type Credentials struct {
 type Config struct {
 	WebServer   WebServer               `yaml:"webServer"`
 	Credentials map[string]*Credentials `yaml:"credentials"`
+	State       State                   `yaml:"state"`
 }
 
 var cfg Config
