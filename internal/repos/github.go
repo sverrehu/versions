@@ -135,10 +135,9 @@ func (rf *GitHubReleasesFetcher) getSearchUrl(owner, repo string, page int) stri
 }
 
 func (rf *GitHubReleasesFetcher) getReleases(owner, repo string) (*internal.ReleasesResponse, error) {
-	sourceURL := "https://github.com/" + url.PathEscape(owner) + "/" + url.PathEscape(repo)
 	releasesResponse := internal.ReleasesResponse{
 		Releases:  make([]internal.Release, 0),
-		SourceURL: &sourceURL,
+		SourceURL: new("https://github.com/" + url.PathEscape(owner) + "/" + url.PathEscape(repo)),
 	}
 	page := rf.firstPage
 	for {
