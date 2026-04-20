@@ -109,6 +109,7 @@ func setupHandlers() {
 	dockerHubCredentials := config.Cfg().Credentials["dockerhub"]
 	handlers = []handler{
 		{target: "/github-releases", handler: &commonReleasesHandler{h: repos.NewGitHubReleasesFetcher(gitHubCredentials)}},
+		{target: "/github-tags", handler: &commonReleasesHandler{h: repos.NewGitHubTagsFetcher(gitHubCredentials)}},
 		{target: "/gitlab-releases", handler: &commonReleasesHandler{h: repos.NewGitLabReleasesFetcher(gitLabCredentials)}},
 		{target: "/maven", handler: &commonReleasesHandler{h: repos.NewMavenReleasesFetcher(mavenCredentials)}},
 		{target: "/dockerhub", handler: &commonReleasesHandler{h: repos.NewOCIReleasesFetcher(dockerHubCredentials)}},
