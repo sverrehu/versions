@@ -1,6 +1,7 @@
 package repos
 
-// Sample: https://api.github.com/repos/prometheus/prometheus/releases?page=1&per_page=100
+// Sample releases: https://api.github.com/repos/prometheus/prometheus/releases?page=1&per_page=100
+// Sample tags: https://api.github.com/repos/confluentinc/libserdes/tags?page=1&per_page=100
 
 import (
 	"encoding/json"
@@ -15,6 +16,13 @@ import (
 )
 
 type GitHubReleasesFetcher struct {
+	ReleasesFetcher
+	firstPage   int
+	perPage     int
+	credentials *config.Credentials
+}
+
+type GitHubTagsFetcher struct {
 	ReleasesFetcher
 	firstPage   int
 	perPage     int
@@ -113,8 +121,27 @@ type fullGitHubReleasesResponse []struct {
 	DiscussionURL string `json:"discussion_url,omitempty"`
 }
 
+type fullGitHubTagsResponse []struct {
+	Name       string `json:"name"`
+	ZipballURL string `json:"zipball_url"`
+	TarballURL string `json:"tarball_url"`
+	Commit     struct {
+		Sha string `json:"sha"`
+		URL string `json:"url"`
+	} `json:"commit"`
+	NodeID string `json:"node_id"`
+}
+
 func NewGitHubReleasesFetcher(credentials *config.Credentials) *GitHubReleasesFetcher {
 	return &GitHubReleasesFetcher{
+		firstPage:   1,
+		perPage:     100,
+		credentials: credentials,
+	}
+}
+
+func NewGitHubTagsFetcher(credentials *config.Credentials) *GitHubTagsFetcher {
+	return &GitHubTagsFetcher{
 		firstPage:   1,
 		perPage:     100,
 		credentials: credentials,
@@ -129,8 +156,21 @@ func (rf *GitHubReleasesFetcher) GetReleases(pkg string) (*internal.ReleasesResp
 	return rf.getReleases(parts[0], parts[1])
 }
 
+func (rf *GitHubTagsFetcher) GetReleases(pkg string) (*internal.ReleasesResponse, error) {
+	parts := regexp.MustCompile("[/]").Split(pkg, -1)
+	if len(parts) != 2 {
+		return nil, &ReleasesFetcherError{Err: fmt.Errorf("expected two parts, separated by '/' in GitHub releases package, got %s", pkg), IsParameterError: true}
+	}
+	return rf.getReleases(parts[0], parts[1])
+}
+
 func (rf *GitHubReleasesFetcher) getSearchUrl(owner, repo string, page int) string {
 	return fmt.Sprintf("https://api.github.com/repos/%s/%s/releases?page=%d&per_page=%d",
+		url.PathEscape(owner), url.PathEscape(repo), page, rf.perPage)
+}
+
+func (rf *GitHubTagsFetcher) getSearchUrl(owner, repo string, page int) string {
+	return fmt.Sprintf("https://api.github.com/repos/%s/%s/tags?page=%d&per_page=%d",
 		url.PathEscape(owner), url.PathEscape(repo), page, rf.perPage)
 }
 
@@ -138,6 +178,35 @@ func (rf *GitHubReleasesFetcher) getReleases(owner, repo string) (*internal.Rele
 	releasesResponse := internal.ReleasesResponse{
 		Releases:  make([]internal.Release, 0),
 		SourceURL: new("https://github.com/" + url.PathEscape(owner) + "/" + url.PathEscape(repo)),
+	}
+	page := rf.firstPage
+	for {
+		searchUrl := rf.getSearchUrl(owner, repo, page)
+		body, err := webclient.Get(searchUrl, rf.credentials)
+		if err != nil {
+			return nil, err
+		}
+		if body == "" {
+			break
+		}
+		releases, err := rf.extractReleases(body)
+		if err != nil {
+			return nil, err
+		}
+		if len(releases) == 0 {
+			break
+		}
+		releasesResponse.Releases = append(releasesResponse.Releases, releases...)
+		page++
+	}
+	return &releasesResponse, nil
+}
+
+func (rf *GitHubTagsFetcher) getReleases(owner, repo string) (*internal.ReleasesResponse, error) {
+	sourceURL := "https://github.com/" + url.PathEscape(owner) + "/" + url.PathEscape(repo)
+	releasesResponse := internal.ReleasesResponse{
+		Releases:  make([]internal.Release, 0),
+		SourceURL: &sourceURL,
 	}
 	page := rf.firstPage
 	for {
@@ -174,6 +243,22 @@ func (rf *GitHubReleasesFetcher) extractReleases(jsonResponse string) ([]interna
 			Version:          result.TagName,
 			ReleaseTimestamp: result.PublishedAt,
 			ChangelogURL:     &result.HTMLURL,
+		}
+		releases = append(releases, release)
+	}
+	return releases, nil
+}
+
+func (rf *GitHubTagsFetcher) extractReleases(jsonResponse string) ([]internal.Release, error) {
+	var resp fullGitHubTagsResponse
+	err := json.Unmarshal([]byte(jsonResponse), &resp)
+	if err != nil {
+		return nil, err
+	}
+	releases := make([]internal.Release, 0, len(resp))
+	for _, result := range resp {
+		release := internal.Release{
+			Version: result.Name,
 		}
 		releases = append(releases, release)
 	}

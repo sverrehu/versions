@@ -11,9 +11,10 @@ import (
 )
 
 type State struct {
-	Cache   *lrumap.LRUMap
-	changed bool
-	mutex   sync.Mutex
+	Cache       *lrumap.LRUMap
+	CommitDates *lrumap.LRUMap
+	changed     bool
+	mutex       sync.Mutex
 }
 
 var state *State
@@ -21,7 +22,8 @@ var stateFilename string
 
 func InitState(stateFile string, cacheMinutes, cacheSize int) {
 	state = &State{
-		Cache: lrumap.New(cacheSize, time.Duration(cacheMinutes)*time.Minute),
+		Cache:       lrumap.New(cacheSize, time.Duration(cacheMinutes)*time.Minute),
+		CommitDates: lrumap.New(10000, 60*24*time.Hour),
 	}
 	stateFilename = stateFile
 	if len(stateFilename) != 0 {
@@ -87,6 +89,27 @@ func GetCachedResponse(path string) []byte {
 		return nil
 	}
 	return value.([]byte)
+}
+
+func PutCommitTimestamp(datasource, commitId string, timestamp time.Time) {
+	state.mutex.Lock()
+	defer state.mutex.Unlock()
+	state.CommitDates.Put(toCommitTimestampKey(datasource, commitId), timestamp)
+	state.changed = true
+}
+
+func GetCommitTimestamp(datasource, commitId string) *time.Time {
+	state.mutex.Lock()
+	defer state.mutex.Unlock()
+	value := state.CommitDates.Get(toCommitTimestampKey(datasource, commitId))
+	if value == nil {
+		return nil
+	}
+	return new(value.(time.Time))
+}
+
+func toCommitTimestampKey(datasource, commitId string) string {
+	return datasource + "/" + commitId
 }
 
 func periodicStateSaveTask() {
