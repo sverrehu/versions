@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/sverrehu/versions/compare/v0.2.0...v0.2.1) (2026-04-20)
+
+
+### Bug Fixes
+
+* restore cache settings to current configuration after load ([#67](https://github.com/sverrehu/versions/issues/67)) ([a67bf06](https://github.com/sverrehu/versions/commit/a67bf066b70db047aa32d92c62c0fb9e98c862e1))
+
 ## [0.2.0](https://github.com/sverrehu/versions/compare/v0.1.12...v0.2.0) (2026-04-20)
 
 
