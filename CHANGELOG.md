@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.1.10](https://github.com/sverrehu/versions/compare/v0.1.9...v0.1.10) (2026-04-20)
+
+
+### Bug Fixes
+
+* avoid double cache lookup ([#58](https://github.com/sverrehu/versions/issues/58)) ([edad30d](https://github.com/sverrehu/versions/commit/edad30dd7ce64c6f726877289bd4718172afed54))
+* **deps:** update module github.com/sverrehu/goutils to v1.0.3 ([#57](https://github.com/sverrehu/versions/issues/57)) ([88da83a](https://github.com/sverrehu/versions/commit/88da83a361784667d6d3a21b72da2e31339ce371))
+* extract cache to common state ([#60](https://github.com/sverrehu/versions/issues/60)) ([fb3ea53](https://github.com/sverrehu/versions/commit/fb3ea53a7bee52132e822875f2c57690d8c23a76))
+
 ## [0.1.9](https://github.com/sverrehu/versions/compare/v0.1.8...v0.1.9) (2026-04-19)
 
 
