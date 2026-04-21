@@ -15,10 +15,7 @@ import (
 // sample: https://gitlab.com/api/v4/projects/gitlab-org%2Fgitlab-runner/releases?page=1&per_page=100
 
 type GitLabReleasesFetcher struct {
-	ReleasesFetcher
-	firstPage   int
-	perPage     int
-	credentials *config.Credentials
+	FetcherBase
 }
 
 type fullGitLabReleasesResponse []struct {
@@ -88,11 +85,13 @@ type fullGitLabReleasesResponse []struct {
 	} `json:"_links"`
 }
 
-func NewGitLabReleasesFetcher(credentials *config.Credentials) *GitLabReleasesFetcher {
+func NewGitLabReleasesFetcher(datasource *config.Datasource) *GitLabReleasesFetcher {
 	return &GitLabReleasesFetcher{
-		firstPage:   1,
-		perPage:     100,
-		credentials: credentials,
+		FetcherBase: FetcherBase{
+			firstPage:   1,
+			perPage:     100,
+			credentials: datasource.Credentials,
+		},
 	}
 }
 

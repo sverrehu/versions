@@ -30,6 +30,12 @@ type CacheSettings struct {
 	CacheMinutes int `yaml:"cacheMinutes"`
 	CacheSize    int `yaml:"cacheSize"`
 }
+
+type Datasource struct {
+	MaxReleases int          `yaml:"maxReleases"`
+	Credentials *Credentials `yaml:"credentials"`
+}
+
 type Credentials struct {
 	UserName string `yaml:"userName,omitempty"`
 	Password string `yaml:"password,omitempty"`
@@ -37,9 +43,9 @@ type Credentials struct {
 }
 
 type Config struct {
-	WebServer   WebServer               `yaml:"webServer"`
-	State       State                   `yaml:"state"`
-	Credentials map[string]*Credentials `yaml:"credentials"`
+	WebServer   WebServer              `yaml:"webServer"`
+	State       State                  `yaml:"state"`
+	Datasources map[string]*Datasource `yaml:"datasources"`
 }
 
 var cfg Config

@@ -15,8 +15,7 @@ import (
 )
 
 type MavenReleasesFetcher struct {
-	ReleasesFetcher
-	credentials *config.Credentials
+	FetcherBase
 }
 
 type fullSonatypeResponse struct {
@@ -28,9 +27,11 @@ type fullSonatypeResponse struct {
 	} `json:"response"`
 }
 
-func NewMavenReleasesFetcher(credentials *config.Credentials) *MavenReleasesFetcher {
+func NewMavenReleasesFetcher(datasource *config.Datasource) *MavenReleasesFetcher {
 	return &MavenReleasesFetcher{
-		credentials: credentials,
+		FetcherBase: FetcherBase{
+			credentials: datasource.Credentials,
+		},
 	}
 }
 

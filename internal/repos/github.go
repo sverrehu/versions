@@ -17,17 +17,11 @@ import (
 )
 
 type GitHubReleasesFetcher struct {
-	ReleasesFetcher
-	firstPage   int
-	perPage     int
-	credentials *config.Credentials
+	FetcherBase
 }
 
 type GitHubTagsFetcher struct {
-	ReleasesFetcher
-	firstPage   int
-	perPage     int
-	credentials *config.Credentials
+	FetcherBase
 }
 
 type fullGitHubReleasesResponse []struct {
@@ -231,19 +225,23 @@ type fullGitHubCommitResponse struct {
 	} `json:"files"`
 }
 
-func NewGitHubReleasesFetcher(credentials *config.Credentials) *GitHubReleasesFetcher {
+func NewGitHubReleasesFetcher(datasource *config.Datasource) *GitHubReleasesFetcher {
 	return &GitHubReleasesFetcher{
-		firstPage:   1,
-		perPage:     100,
-		credentials: credentials,
+		FetcherBase: FetcherBase{
+			firstPage:   1,
+			perPage:     100,
+			credentials: datasource.Credentials,
+		},
 	}
 }
 
-func NewGitHubTagsFetcher(credentials *config.Credentials) *GitHubTagsFetcher {
+func NewGitHubTagsFetcher(datasource *config.Datasource) *GitHubTagsFetcher {
 	return &GitHubTagsFetcher{
-		firstPage:   1,
-		perPage:     100,
-		credentials: credentials,
+		FetcherBase: FetcherBase{
+			firstPage:   1,
+			perPage:     100,
+			credentials: datasource.Credentials,
+		},
 	}
 }
 

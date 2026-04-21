@@ -102,15 +102,12 @@ func Run(port int) error {
 }
 
 func setupHandlers() {
-	gitHubCredentials := config.Cfg().Credentials["github"]
-	gitLabCredentials := config.Cfg().Credentials["gitlab"]
-	mavenCredentials := config.Cfg().Credentials["maven"]
-	dockerHubCredentials := config.Cfg().Credentials["dockerhub"]
+	datasourcesCfg := config.Cfg().Datasources
 	handlers = []handler{
-		{target: "/github-releases", handler: &commonReleasesHandler{h: repos.NewGitHubReleasesFetcher(gitHubCredentials)}},
-		{target: "/github-tags", handler: &commonReleasesHandler{h: repos.NewGitHubTagsFetcher(gitHubCredentials)}},
-		{target: "/gitlab-releases", handler: &commonReleasesHandler{h: repos.NewGitLabReleasesFetcher(gitLabCredentials)}},
-		{target: "/maven", handler: &commonReleasesHandler{h: repos.NewMavenReleasesFetcher(mavenCredentials)}},
-		{target: "/dockerhub", handler: &commonReleasesHandler{h: repos.NewOCIReleasesFetcher(dockerHubCredentials)}},
+		{target: "/github-releases", handler: &commonReleasesHandler{h: repos.NewGitHubReleasesFetcher(datasourcesCfg["github-releases"])}},
+		{target: "/github-tags", handler: &commonReleasesHandler{h: repos.NewGitHubTagsFetcher(datasourcesCfg["github-tags"])}},
+		{target: "/gitlab-releases", handler: &commonReleasesHandler{h: repos.NewGitLabReleasesFetcher(datasourcesCfg["gitlab-releases"])}},
+		{target: "/maven", handler: &commonReleasesHandler{h: repos.NewMavenReleasesFetcher(datasourcesCfg["maven"])}},
+		{target: "/dockerhub", handler: &commonReleasesHandler{h: repos.NewOCIReleasesFetcher(datasourcesCfg["dockerhub"])}},
 	}
 }
