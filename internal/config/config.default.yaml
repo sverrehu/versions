@@ -1,6 +1,7 @@
 ---
 webServer:
   port: 8086
+
 state:
   filename: ""
   cache:
@@ -10,3 +11,25 @@ state:
     commitTimestamps:
       cacheMinutes: 86400 # 60 days
       cacheSize: 10000
+
+datasources:
+  github-releases:
+    credentials:
+      token: ""
+    maxReleases: 0
+  github-tags:
+    credentials:
+      token: ""
+    maxReleases: 20
+  gitlab-releases:
+    credentials:
+      token: ""
+    maxReleases: 0
+  maven:
+    credentials:
+      token: ""
+    maxReleases: 0
+  dockerhub:
+    credentials:
+      token: ""
+    maxReleases: 0

@@ -15,10 +15,7 @@ import (
 )
 
 type OCIReleasesFetcher struct {
-	ReleasesFetcher
-	firstPage   int
-	perPage     int
-	credentials *config.Credentials
+	FetcherBase
 }
 
 type fullOCIResponse struct {
@@ -57,11 +54,13 @@ type fullOCIResponse struct {
 	} `json:"results"`
 }
 
-func NewOCIReleasesFetcher(credentials *config.Credentials) *OCIReleasesFetcher {
+func NewOCIReleasesFetcher(datasource *config.Datasource) *OCIReleasesFetcher {
 	return &OCIReleasesFetcher{
-		firstPage:   1,
-		perPage:     100,
-		credentials: credentials,
+		FetcherBase: FetcherBase{
+			firstPage:   1,
+			perPage:     100,
+			credentials: datasource.Credentials,
+		},
 	}
 }
 
