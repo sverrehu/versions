@@ -20,7 +20,7 @@ datasources:
   github-tags:
     credentials:
       token: ""
-    maxReleases: 20
+    maxReleases: 50
   gitlab-releases:
     credentials:
       token: ""

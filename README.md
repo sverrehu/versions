@@ -19,7 +19,6 @@ In semi-prioritized order:
 * Gracefully handle error codes from downstream.
   Currently, everything bad from the backends lead to 500.
   Need to report back on rate limiting errors, at least.
-* Make max number of retrieved versions configurable per datasource, default to all, except for github-tags.
 * Add more data sources.
   This is the last item because I think that when everything above is in place, it will be possible to see what can be extracted to avoid too much duplicate code.
   There is duplication already, but it is my intention to clean it up, eventually.

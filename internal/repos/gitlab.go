@@ -87,11 +87,7 @@ type fullGitLabReleasesResponse []struct {
 
 func NewGitLabReleasesFetcher(datasource *config.Datasource) *GitLabReleasesFetcher {
 	return &GitLabReleasesFetcher{
-		FetcherBase: FetcherBase{
-			firstPage:   1,
-			perPage:     100,
-			credentials: datasource.Credentials,
-		},
+		FetcherBase: *NewFetcherBase(1, 100, datasource.MaxReleases, datasource.Credentials),
 	}
 }
 
@@ -132,6 +128,10 @@ func (rf *GitLabReleasesFetcher) getReleases(owner, repo string) (*internal.Rele
 		}
 		releasesResponse.Releases = append(releasesResponse.Releases, releases...)
 		page++
+		if rf.maxReleases > 0 && len(releasesResponse.Releases) > rf.maxReleases {
+			releasesResponse.Releases = releasesResponse.Releases[:rf.maxReleases]
+			break
+		}
 	}
 	return &releasesResponse, nil
 }
