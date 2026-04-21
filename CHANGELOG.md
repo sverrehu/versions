@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/sverrehu/versions/compare/v0.3.0...v0.3.1) (2026-04-21)
+
+
+### Bug Fixes
+
+* enable limiting number of releases returned per datasource ([#72](https://github.com/sverrehu/versions/issues/72)) ([2d8b463](https://github.com/sverrehu/versions/commit/2d8b4631c1b6beff51d13a0646c9d5c60be270fb))
+
 ## [0.3.0](https://github.com/sverrehu/versions/compare/v0.2.1...v0.3.0) (2026-04-21)
 
 
