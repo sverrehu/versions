@@ -29,9 +29,7 @@ type fullSonatypeResponse struct {
 
 func NewMavenReleasesFetcher(datasource *config.Datasource) *MavenReleasesFetcher {
 	return &MavenReleasesFetcher{
-		FetcherBase: FetcherBase{
-			credentials: datasource.Credentials,
-		},
+		FetcherBase: *NewFetcherBase(1, 100, datasource.MaxReleases, datasource.Credentials),
 	}
 }
 
@@ -52,11 +50,14 @@ func (rf *MavenReleasesFetcher) getReleases(groupId, artifactId string) (*intern
 	if body == "" {
 		return &internal.ReleasesResponse{}, nil
 	}
-	releases, err := rf.translateResponse(body)
+	releasesResponse, err := rf.translateResponse(body)
 	if err != nil {
 		return nil, err
 	}
-	return releases, nil
+	if rf.maxReleases > 0 && len(releasesResponse.Releases) > rf.maxReleases {
+		releasesResponse.Releases = releasesResponse.Releases[:rf.maxReleases]
+	}
+	return releasesResponse, nil
 }
 
 func (rf *MavenReleasesFetcher) getSearchUrl(groupId, artifactId string) string {
