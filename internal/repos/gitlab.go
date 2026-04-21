@@ -98,7 +98,7 @@ func NewGitLabReleasesFetcher(datasource *config.Datasource) *GitLabReleasesFetc
 func (rf *GitLabReleasesFetcher) GetReleases(pkg string) (*internal.ReleasesResponse, error) {
 	parts := regexp.MustCompile("[/]").Split(pkg, -1)
 	if len(parts) != 2 {
-		return nil, &ReleasesFetcherError{Err: fmt.Errorf("expected two parts, separated by '/' in GitLab releases package, got %s", pkg), IsParameterError: true}
+		return nil, &FetcherError{Err: fmt.Errorf("expected two parts, separated by '/' in GitLab releases package, got %s", pkg), IsParameterError: true}
 	}
 	return rf.getReleases(parts[0], parts[1])
 }

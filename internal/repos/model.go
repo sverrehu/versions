@@ -5,22 +5,22 @@ import (
 	"github.com/sverrehu/gotest/versions/internal/config"
 )
 
-type ReleasesFetcher interface {
+type Fetcher interface {
 	GetReleases(pkg string) (*internal.ReleasesResponse, error)
 }
 
 type FetcherBase struct {
-	ReleasesFetcher
+	Fetcher
 	firstPage   int
 	perPage     int
 	credentials *config.Credentials
 }
 
-type ReleasesFetcherError struct {
+type FetcherError struct {
 	Err              error
 	IsParameterError bool
 }
 
-func (e *ReleasesFetcherError) Error() string {
+func (e *FetcherError) Error() string {
 	return e.Err.Error()
 }

@@ -248,7 +248,7 @@ func NewGitHubTagsFetcher(datasource *config.Datasource) *GitHubTagsFetcher {
 func (rf *GitHubReleasesFetcher) GetReleases(pkg string) (*internal.ReleasesResponse, error) {
 	parts := regexp.MustCompile("[/]").Split(pkg, -1)
 	if len(parts) != 2 {
-		return nil, &ReleasesFetcherError{Err: fmt.Errorf("expected two parts, separated by '/' in GitHub releases package, got %s", pkg), IsParameterError: true}
+		return nil, &FetcherError{Err: fmt.Errorf("expected two parts, separated by '/' in GitHub releases package, got %s", pkg), IsParameterError: true}
 	}
 	return rf.getReleases(parts[0], parts[1])
 }
@@ -307,7 +307,7 @@ func (rf *GitHubReleasesFetcher) extractReleases(jsonResponse string) ([]interna
 func (rf *GitHubTagsFetcher) GetReleases(pkg string) (*internal.ReleasesResponse, error) {
 	parts := regexp.MustCompile("[/]").Split(pkg, -1)
 	if len(parts) != 2 {
-		return nil, &ReleasesFetcherError{Err: fmt.Errorf("expected two parts, separated by '/' in GitHub releases package, got %s", pkg), IsParameterError: true}
+		return nil, &FetcherError{Err: fmt.Errorf("expected two parts, separated by '/' in GitHub releases package, got %s", pkg), IsParameterError: true}
 	}
 	return rf.getReleases(parts[0], parts[1])
 }

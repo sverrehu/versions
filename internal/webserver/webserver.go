@@ -25,7 +25,7 @@ type handler struct {
 var handlers []handler
 
 type commonReleasesHandler struct {
-	h repos.ReleasesFetcher
+	h repos.Fetcher
 }
 
 type indexHandler struct{}
@@ -39,7 +39,7 @@ func (h *commonReleasesHandler) ServeHTTP(w http.ResponseWriter, r *http.Request
 		pkg := r.PathValue("package")
 		releases, err := h.h.GetReleases(pkg)
 		if err != nil {
-			var re *repos.ReleasesFetcherError
+			var re *repos.FetcherError
 			ok := errors.As(err, &re)
 			if ok && re.IsParameterError {
 				sendBadRequest(w, err.Error(), r.URL)
