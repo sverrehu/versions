@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.3.0](https://github.com/sverrehu/versions/compare/v0.2.1...v0.3.0) (2026-04-21)
+
+
+### ⚠ BREAKING CHANGES
+
+* restructure configuration again ([#69](https://github.com/sverrehu/versions/issues/69))
+
+### Bug Fixes
+
+* restructure configuration again ([#69](https://github.com/sverrehu/versions/issues/69)) ([7ce0ad9](https://github.com/sverrehu/versions/commit/7ce0ad9ebdb0560eac671a71d82a9c6c1293882d))
+
 ## [0.2.1](https://github.com/sverrehu/versions/compare/v0.2.0...v0.2.1) (2026-04-20)
 
 
