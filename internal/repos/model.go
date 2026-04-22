@@ -3,10 +3,13 @@ package repos
 import (
 	"github.com/sverrehu/gotest/versions/internal"
 	"github.com/sverrehu/gotest/versions/internal/config"
+	"github.com/sverrehu/gotest/versions/internal/webclient"
 )
 
 type Fetcher interface {
 	GetReleases(pkg string) (*internal.ReleasesResponse, error)
+	getSearchUrl(owner, repo string, page int) string
+	extractReleases(owner, repo, jsonResponse string) ([]internal.Release, error)
 }
 
 type FetcherBase struct {
@@ -37,4 +40,32 @@ func NewFetcherBase(firstPage, perPage, maxReleases int, credentials *config.Cre
 		fb.perPage = maxReleases
 	}
 	return fb
+}
+
+func (fb *FetcherBase) paginate(f Fetcher, releasesResponse *internal.ReleasesResponse, owner, repo string) error {
+	page := fb.firstPage
+	for {
+		searchUrl := f.getSearchUrl(owner, repo, page)
+		body, err := webclient.Get(searchUrl, fb.credentials)
+		if err != nil {
+			return err
+		}
+		if body == "" {
+			break
+		}
+		releases, err := f.extractReleases(owner, repo, body)
+		if err != nil {
+			return err
+		}
+		if len(releases) == 0 {
+			break
+		}
+		releasesResponse.Releases = append(releasesResponse.Releases, releases...)
+		page++
+		if fb.maxReleases > 0 && len(releasesResponse.Releases) > fb.maxReleases {
+			releasesResponse.Releases = releasesResponse.Releases[:fb.maxReleases]
+			break
+		}
+	}
+	return nil
 }

@@ -42,7 +42,7 @@ func (rf *MavenReleasesFetcher) GetReleases(pkg string) (*internal.ReleasesRespo
 }
 
 func (rf *MavenReleasesFetcher) getReleases(groupId, artifactId string) (*internal.ReleasesResponse, error) {
-	searchUrl := rf.getSearchUrl(groupId, artifactId)
+	searchUrl := rf.getSearchUrl(groupId, artifactId, rf.firstPage)
 	body, err := webclient.Get(searchUrl, rf.credentials)
 	if err != nil {
 		return nil, err
@@ -60,7 +60,7 @@ func (rf *MavenReleasesFetcher) getReleases(groupId, artifactId string) (*intern
 	return releasesResponse, nil
 }
 
-func (rf *MavenReleasesFetcher) getSearchUrl(groupId, artifactId string) string {
+func (rf *MavenReleasesFetcher) getSearchUrl(groupId, artifactId string, _ int) string {
 	return fmt.Sprintf("https://central.sonatype.com/solrsearch/select?wt=json&q=g:%s+AND+a:%s&sort=v+desc",
 		url.QueryEscape(groupId), url.QueryEscape(artifactId))
 }
