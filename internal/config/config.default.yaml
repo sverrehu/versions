@@ -29,7 +29,7 @@ datasources:
     credentials:
       token: ""
     maxReleases: 0
-  docker:
+  dockerhub:
     credentials:
       token: ""
     maxReleases: 1000

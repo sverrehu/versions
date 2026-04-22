@@ -108,6 +108,6 @@ func setupHandlers() {
 		{target: "/github-tags", handler: &commonReleasesHandler{h: repos.NewGitHubTagsFetcher(datasourcesCfg.GitHubTagsDatasource)}},
 		{target: "/gitlab-releases", handler: &commonReleasesHandler{h: repos.NewGitLabReleasesFetcher(datasourcesCfg.GitLabReleasesDatasource)}},
 		{target: "/maven", handler: &commonReleasesHandler{h: repos.NewMavenReleasesFetcher(datasourcesCfg.MavenDatasource)}},
-		{target: "/docker", handler: &commonReleasesHandler{h: repos.NewOCIReleasesFetcher(datasourcesCfg.DockerDatasource)}},
+		{target: "/dockerhub", handler: &commonReleasesHandler{h: repos.NewOCIReleasesFetcher(datasourcesCfg.DockerhubDatasource)}},
 	}
 }
