@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.1](https://github.com/sverrehu/versions/compare/v0.4.0...v0.4.1) (2026-04-22)
+
+
+### Bug Fixes
+
+* correct link description ([#80](https://github.com/sverrehu/versions/issues/80)) ([2a49f71](https://github.com/sverrehu/versions/commit/2a49f71abdb15f7d94681b35be74edec575d432c))
+
 ## [0.4.0](https://github.com/sverrehu/versions/compare/v0.3.3...v0.4.0) (2026-04-22)
 
 
