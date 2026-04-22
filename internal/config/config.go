@@ -11,29 +11,29 @@ import (
 var defaultConfig []byte
 
 type WebServer struct {
-	Port         int `yaml:"port"`
-	CacheMinutes int `yaml:"cacheMinutes"`
-	CacheSize    int `yaml:"cacheSize"`
+	Port         int `yaml:"port,omitempty"`
+	CacheMinutes int `yaml:"cacheMinutes,omitempty"`
+	CacheSize    int `yaml:"cacheSize,omitempty"`
 }
 
 type State struct {
-	Filename string `yaml:"filename"`
-	Cache    Cache  `yaml:"cache"`
+	Filename string `yaml:"filename,omitempty"`
+	Cache    Cache  `yaml:"cache,omitempty"`
 }
 
 type Cache struct {
-	Releases         CacheSettings `yaml:"releases"`
-	CommitTimestamps CacheSettings `yaml:"commitTimestamps"`
+	Releases         CacheSettings `yaml:"releases,omitempty"`
+	CommitTimestamps CacheSettings `yaml:"commitTimestamps,omitempty"`
 }
 
 type CacheSettings struct {
-	CacheMinutes int `yaml:"cacheMinutes"`
-	CacheSize    int `yaml:"cacheSize"`
+	CacheMinutes int `yaml:"cacheMinutes,omitempty"`
+	CacheSize    int `yaml:"cacheSize,omitempty"`
 }
 
 type Datasource struct {
-	MaxReleases int          `yaml:"maxReleases"`
-	Credentials *Credentials `yaml:"credentials"`
+	MaxReleases int          `yaml:"maxReleases,omitempty"`
+	Credentials *Credentials `yaml:"credentials,omitempty"`
 }
 
 type Credentials struct {
@@ -42,10 +42,18 @@ type Credentials struct {
 	Token    string `yaml:"token,omitempty"`
 }
 
+type Datasources struct {
+	GitHubReleasesDatasource *Datasource `yaml:"github-releases,omitempty"`
+	GitHubTagsDatasource     *Datasource `yaml:"github-tags,omitempty"`
+	GitLabReleasesDatasource *Datasource `yaml:"gitlab-releases,omitempty"`
+	MavenDatasource          *Datasource `yaml:"maven,omitempty"`
+	DockerhubDatasource      *Datasource `yaml:"dockerhub,omitempty"`
+}
+
 type Config struct {
-	WebServer   WebServer              `yaml:"webServer"`
-	State       State                  `yaml:"state"`
-	Datasources map[string]*Datasource `yaml:"datasources"`
+	WebServer   WebServer    `yaml:"webServer,omitempty"`
+	State       State        `yaml:"state,omitempty"`
+	Datasources *Datasources `yaml:"datasources,omitempty"`
 }
 
 var cfg Config

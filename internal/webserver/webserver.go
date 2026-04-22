@@ -102,12 +102,12 @@ func Run(port int) error {
 }
 
 func setupHandlers() {
-	datasourcesCfg := config.Cfg().Datasources
+	datasourcesCfg := *config.Cfg().Datasources
 	handlers = []handler{
-		{target: "/github-releases", handler: &commonReleasesHandler{h: repos.NewGitHubReleasesFetcher(datasourcesCfg["github-releases"])}},
-		{target: "/github-tags", handler: &commonReleasesHandler{h: repos.NewGitHubTagsFetcher(datasourcesCfg["github-tags"])}},
-		{target: "/gitlab-releases", handler: &commonReleasesHandler{h: repos.NewGitLabReleasesFetcher(datasourcesCfg["gitlab-releases"])}},
-		{target: "/maven", handler: &commonReleasesHandler{h: repos.NewMavenReleasesFetcher(datasourcesCfg["maven"])}},
-		{target: "/dockerhub", handler: &commonReleasesHandler{h: repos.NewOCIReleasesFetcher(datasourcesCfg["dockerhub"])}},
+		{target: "/github-releases", handler: &commonReleasesHandler{h: repos.NewGitHubReleasesFetcher(datasourcesCfg.GitHubReleasesDatasource)}},
+		{target: "/github-tags", handler: &commonReleasesHandler{h: repos.NewGitHubTagsFetcher(datasourcesCfg.GitHubTagsDatasource)}},
+		{target: "/gitlab-releases", handler: &commonReleasesHandler{h: repos.NewGitLabReleasesFetcher(datasourcesCfg.GitLabReleasesDatasource)}},
+		{target: "/maven", handler: &commonReleasesHandler{h: repos.NewMavenReleasesFetcher(datasourcesCfg.MavenDatasource)}},
+		{target: "/dockerhub", handler: &commonReleasesHandler{h: repos.NewOCIReleasesFetcher(datasourcesCfg.DockerhubDatasource)}},
 	}
 }
