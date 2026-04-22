@@ -32,4 +32,4 @@ datasources:
   dockerhub:
     credentials:
       token: ""
-    maxReleases: 0
+    maxReleases: 1000
