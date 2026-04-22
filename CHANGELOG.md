@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.5.0](https://github.com/sverrehu/versions/compare/v0.4.1...v0.5.0) (2026-04-22)
+
+
+### ⚠ BREAKING CHANGES
+
+* change docker back to dockerhub ([#83](https://github.com/sverrehu/versions/issues/83))
+
+### Bug Fixes
+
+* change docker back to dockerhub ([#83](https://github.com/sverrehu/versions/issues/83)) ([92b3f3f](https://github.com/sverrehu/versions/commit/92b3f3fc787de16934aeb7592090f2709833db14))
+
 ## [0.4.1](https://github.com/sverrehu/versions/compare/v0.4.0...v0.4.1) (2026-04-22)
 
 
