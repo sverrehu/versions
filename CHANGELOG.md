@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.1](https://github.com/sverrehu/versions/compare/v0.5.0...v0.5.1) (2026-04-22)
+
+
+### Bug Fixes
+
+* introduce common function for API paging ([#85](https://github.com/sverrehu/versions/issues/85)) ([4ef8801](https://github.com/sverrehu/versions/commit/4ef8801804d7a4aecbd187e8751d6419beb5d143))
+
 ## [0.5.0](https://github.com/sverrehu/versions/compare/v0.4.1...v0.5.0) (2026-04-22)
 
 
