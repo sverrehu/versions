@@ -47,7 +47,7 @@ type Datasources struct {
 	GitHubTagsDatasource     *Datasource `yaml:"github-tags,omitempty"`
 	GitLabReleasesDatasource *Datasource `yaml:"gitlab-releases,omitempty"`
 	MavenDatasource          *Datasource `yaml:"maven,omitempty"`
-	DockerhubDatasource      *Datasource `yaml:"dockerhub,omitempty"`
+	DockerDatasource         *Datasource `yaml:"docker,omitempty"`
 }
 
 type Config struct {
