@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.4.0](https://github.com/sverrehu/versions/compare/v0.3.3...v0.4.0) (2026-04-22)
+
+
+### ⚠ BREAKING CHANGES
+
+* rename dockerhub to docker to better align with Renovate ([#78](https://github.com/sverrehu/versions/issues/78))
+
+### Bug Fixes
+
+* rename dockerhub to docker to better align with Renovate ([#78](https://github.com/sverrehu/versions/issues/78)) ([9b802bf](https://github.com/sverrehu/versions/commit/9b802bfde7d4e20667f583afd8caa931ab6d64b7))
+
 ## [0.3.3](https://github.com/sverrehu/versions/compare/v0.3.2...v0.3.3) (2026-04-22)
 
 
