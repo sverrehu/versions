@@ -11,7 +11,6 @@ import (
 
 	"github.com/sverrehu/gotest/versions/internal"
 	"github.com/sverrehu/gotest/versions/internal/config"
-	"github.com/sverrehu/gotest/versions/internal/webclient"
 )
 
 type OCIReleasesFetcher struct {
@@ -77,34 +76,14 @@ func (rf *OCIReleasesFetcher) getReleases(owner, repo string) (*internal.Release
 	releasesResponse := internal.ReleasesResponse{
 		Releases: make([]internal.Release, 0),
 	}
-	page := rf.firstPage
-	for {
-		searchUrl := rf.getSearchUrl(owner, repo, page)
-		body, err := webclient.Get(searchUrl, rf.credentials)
-		if err != nil {
-			return nil, err
-		}
-		if body == "" {
-			break
-		}
-		releases, err := rf.extractReleases(body)
-		if err != nil {
-			return nil, err
-		}
-		if len(releases) == 0 {
-			break
-		}
-		releasesResponse.Releases = append(releasesResponse.Releases, releases...)
-		page++
-		if rf.maxReleases > 0 && len(releasesResponse.Releases) > rf.maxReleases {
-			releasesResponse.Releases = releasesResponse.Releases[:rf.maxReleases]
-			break
-		}
+	err := rf.paginate(rf, &releasesResponse, owner, repo)
+	if err != nil {
+		return nil, err
 	}
 	return &releasesResponse, nil
 }
 
-func (rf *OCIReleasesFetcher) extractReleases(jsonResponse string) ([]internal.Release, error) {
+func (rf *OCIReleasesFetcher) extractReleases(_, _, jsonResponse string) ([]internal.Release, error) {
 	var resp fullOCIResponse
 	err := json.Unmarshal([]byte(jsonResponse), &resp)
 	if err != nil {

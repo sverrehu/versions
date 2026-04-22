@@ -9,7 +9,6 @@ import (
 
 	"github.com/sverrehu/gotest/versions/internal"
 	"github.com/sverrehu/gotest/versions/internal/config"
-	"github.com/sverrehu/gotest/versions/internal/webclient"
 )
 
 // sample: https://gitlab.com/api/v4/projects/gitlab-org%2Fgitlab-runner/releases?page=1&per_page=100
@@ -109,34 +108,14 @@ func (rf *GitLabReleasesFetcher) getReleases(owner, repo string) (*internal.Rele
 		Releases:  make([]internal.Release, 0),
 		SourceURL: new("https://gitlab.com/" + url.PathEscape(owner) + "/" + url.PathEscape(repo)),
 	}
-	page := rf.firstPage
-	for {
-		searchUrl := rf.getSearchUrl(owner, repo, page)
-		body, err := webclient.Get(searchUrl, rf.credentials)
-		if err != nil {
-			return nil, err
-		}
-		if body == "" {
-			break
-		}
-		releases, err := rf.extractReleases(body)
-		if err != nil {
-			return nil, err
-		}
-		if len(releases) == 0 {
-			break
-		}
-		releasesResponse.Releases = append(releasesResponse.Releases, releases...)
-		page++
-		if rf.maxReleases > 0 && len(releasesResponse.Releases) > rf.maxReleases {
-			releasesResponse.Releases = releasesResponse.Releases[:rf.maxReleases]
-			break
-		}
+	err := rf.paginate(rf, &releasesResponse, owner, repo)
+	if err != nil {
+		return nil, err
 	}
 	return &releasesResponse, nil
 }
 
-func (rf *GitLabReleasesFetcher) extractReleases(jsonResponse string) ([]internal.Release, error) {
+func (rf *GitLabReleasesFetcher) extractReleases(_, _, jsonResponse string) ([]internal.Release, error) {
 	var resp fullGitLabReleasesResponse
 	err := json.Unmarshal([]byte(jsonResponse), &resp)
 	if err != nil {

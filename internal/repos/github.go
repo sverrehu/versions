@@ -255,34 +255,14 @@ func (rf *GitHubReleasesFetcher) getReleases(owner, repo string) (*internal.Rele
 		Releases:  make([]internal.Release, 0),
 		SourceURL: new("https://github.com/" + url.PathEscape(owner) + "/" + url.PathEscape(repo)),
 	}
-	page := rf.firstPage
-	for {
-		searchUrl := rf.getSearchUrl(owner, repo, page)
-		body, err := webclient.Get(searchUrl, rf.credentials)
-		if err != nil {
-			return nil, err
-		}
-		if body == "" {
-			break
-		}
-		releases, err := rf.extractReleases(body)
-		if err != nil {
-			return nil, err
-		}
-		if len(releases) == 0 {
-			break
-		}
-		releasesResponse.Releases = append(releasesResponse.Releases, releases...)
-		page++
-		if rf.maxReleases > 0 && len(releasesResponse.Releases) > rf.maxReleases {
-			releasesResponse.Releases = releasesResponse.Releases[:rf.maxReleases]
-			break
-		}
+	err := rf.paginate(rf, &releasesResponse, owner, repo)
+	if err != nil {
+		return nil, err
 	}
 	return &releasesResponse, nil
 }
 
-func (rf *GitHubReleasesFetcher) extractReleases(jsonResponse string) ([]internal.Release, error) {
+func (rf *GitHubReleasesFetcher) extractReleases(_, _, jsonResponse string) ([]internal.Release, error) {
 	var resp fullGitHubReleasesResponse
 	err := json.Unmarshal([]byte(jsonResponse), &resp)
 	if err != nil {
@@ -318,29 +298,9 @@ func (rf *GitHubTagsFetcher) getReleases(owner, repo string) (*internal.Releases
 		Releases:  make([]internal.Release, 0),
 		SourceURL: new("https://github.com/" + url.PathEscape(owner) + "/" + url.PathEscape(repo)),
 	}
-	page := rf.firstPage
-	for {
-		searchUrl := rf.getSearchUrl(owner, repo, page)
-		body, err := webclient.Get(searchUrl, rf.credentials)
-		if err != nil {
-			return nil, err
-		}
-		if body == "" {
-			break
-		}
-		releases, err := rf.extractReleases(owner, repo, body)
-		if err != nil {
-			return nil, err
-		}
-		if len(releases) == 0 {
-			break
-		}
-		releasesResponse.Releases = append(releasesResponse.Releases, releases...)
-		page++
-		if rf.maxReleases > 0 && len(releasesResponse.Releases) > rf.maxReleases {
-			releasesResponse.Releases = releasesResponse.Releases[:rf.maxReleases]
-			break
-		}
+	err := rf.paginate(rf, &releasesResponse, owner, repo)
+	if err != nil {
+		return nil, err
 	}
 	return &releasesResponse, nil
 }
