@@ -1,4 +1,4 @@
-module github.com/sverrehu/gotest/versions
+module github.com/sverrehu/versions
 
 go 1.26.1
 

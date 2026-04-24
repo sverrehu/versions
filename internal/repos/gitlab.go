@@ -7,8 +7,8 @@ import (
 	"regexp"
 	"time"
 
-	"github.com/sverrehu/gotest/versions/internal"
-	"github.com/sverrehu/gotest/versions/internal/config"
+	"github.com/sverrehu/versions/internal"
+	"github.com/sverrehu/versions/internal/config"
 )
 
 // sample: https://gitlab.com/api/v4/projects/gitlab-org%2Fgitlab-runner/releases?page=1&per_page=100

@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/sverrehu/gotest/versions/internal/config"
-	"github.com/sverrehu/gotest/versions/internal/state"
-	"github.com/sverrehu/gotest/versions/internal/webserver"
 	"github.com/sverrehu/goutils/getopt"
+	"github.com/sverrehu/versions/internal/config"
+	"github.com/sverrehu/versions/internal/state"
+	"github.com/sverrehu/versions/internal/webserver"
 )
 
 func main() {
