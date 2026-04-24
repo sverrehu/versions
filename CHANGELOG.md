@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.2](https://github.com/sverrehu/versions/compare/v0.5.1...v0.5.2) (2026-04-24)
+
+
+### Bug Fixes
+
+* rename package to what it currently is ([#88](https://github.com/sverrehu/versions/issues/88)) ([9c7c3d5](https://github.com/sverrehu/versions/commit/9c7c3d5adf0c99ca118f17b3ccfde30015332201))
+
 ## [0.5.1](https://github.com/sverrehu/versions/compare/v0.5.0...v0.5.1) (2026-04-22)
 
 
