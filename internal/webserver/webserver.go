@@ -9,9 +9,9 @@ import (
 	"net/url"
 	"strconv"
 
-	"github.com/sverrehu/gotest/versions/internal/config"
-	"github.com/sverrehu/gotest/versions/internal/repos"
-	"github.com/sverrehu/gotest/versions/internal/state"
+	"github.com/sverrehu/versions/internal/config"
+	"github.com/sverrehu/versions/internal/repos"
+	"github.com/sverrehu/versions/internal/state"
 )
 
 //go:embed index.html

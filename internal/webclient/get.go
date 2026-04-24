@@ -7,7 +7,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/sverrehu/gotest/versions/internal/config"
+	"github.com/sverrehu/versions/internal/config"
 )
 
 func Get(url string, credentials *config.Credentials) (string, error) {

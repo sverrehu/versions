@@ -9,8 +9,8 @@ import (
 	"regexp"
 	"time"
 
-	"github.com/sverrehu/gotest/versions/internal"
-	"github.com/sverrehu/gotest/versions/internal/config"
+	"github.com/sverrehu/versions/internal"
+	"github.com/sverrehu/versions/internal/config"
 )
 
 type OCIReleasesFetcher struct {

@@ -1,9 +1,9 @@
 package repos
 
 import (
-	"github.com/sverrehu/gotest/versions/internal"
-	"github.com/sverrehu/gotest/versions/internal/config"
-	"github.com/sverrehu/gotest/versions/internal/webclient"
+	"github.com/sverrehu/versions/internal"
+	"github.com/sverrehu/versions/internal/config"
+	"github.com/sverrehu/versions/internal/webclient"
 )
 
 type Fetcher interface {
