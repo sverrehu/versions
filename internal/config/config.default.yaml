@@ -3,24 +3,24 @@ webServer:
   port: 8086
 
 state:
-  filename: ""
+  filename: "" # give a filename to have caches saved across restarts.
   cache:
     releases:
       cacheMinutes: 30
       cacheSize: 3000
     commitTimestamps:
-      cacheMinutes: 86400 # 60 days
+      cacheMinutes: 86400 # 60 days.
       cacheSize: 10000
 
 datasources:
   github-releases:
     credentials:
       token: ""
-    maxReleases: 0
+    maxReleases: 0 # 0 means fetch all releases.
   github-tags:
     credentials:
       token: ""
-    maxReleases: 50
+    maxReleases: 50 # github-tags leads to API calls for every commit, so keep it low.
   gitlab-releases:
     credentials:
       token: ""
