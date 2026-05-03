@@ -34,7 +34,7 @@ location ^~ /_v/ {
 }
 ```
 
-This will make the Versions Proxy available as "https://myserver.example.com/_v/".
+This will make the Versions Proxy available as `https://myserver.example.com/_v/`.
 Then you may add custom Renovate data sources like this:
 
 ```json
