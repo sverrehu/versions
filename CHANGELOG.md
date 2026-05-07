@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.0](https://github.com/sverrehu/versions/compare/v0.5.2...v0.6.0) (2026-05-07)
+
+
+### Features
+
+* **github-releases:** set isStable based on prerelease status ([#94](https://github.com/sverrehu/versions/issues/94)) ([ac6f751](https://github.com/sverrehu/versions/commit/ac6f7510f6728bd841c743c4e30c1c9ee36b9a8e))
+
 ## [0.5.2](https://github.com/sverrehu/versions/compare/v0.5.1...v0.5.2) (2026-04-24)
 
 
