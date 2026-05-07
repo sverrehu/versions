@@ -274,6 +274,7 @@ func (rf *GitHubReleasesFetcher) extractReleases(_, _, jsonResponse string) ([]i
 			Version:          result.TagName,
 			ReleaseTimestamp: result.PublishedAt,
 			ChangelogURL:     &result.HTMLURL,
+			IsStable:         new(!result.Prerelease),
 		}
 		releases = append(releases, release)
 	}
