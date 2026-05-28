@@ -6,13 +6,17 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/sverrehu/versions/internal/config"
 )
 
+var client = &http.Client{
+	Timeout: 60 * time.Second,
+}
+
 func Get(url string, credentials *config.Credentials) (string, error) {
 	log.Printf("fetching %s", url)
-	client := &http.Client{}
 	req, _ := http.NewRequest("GET", url, nil)
 	addCredentials(req, credentials)
 	resp, err := client.Do(req)
