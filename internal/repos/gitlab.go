@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
-	"regexp"
+	"strings"
 	"time"
 
 	"github.com/sverrehu/versions/internal"
@@ -91,7 +91,7 @@ func NewGitLabReleasesFetcher(datasource *config.Datasource) *GitLabReleasesFetc
 }
 
 func (rf *GitLabReleasesFetcher) GetReleases(pkg string) (*internal.ReleasesResponse, error) {
-	parts := regexp.MustCompile("[/]").Split(pkg, -1)
+	parts := strings.Split(pkg, "/")
 	if len(parts) != 2 {
 		return nil, &FetcherError{Err: fmt.Errorf("expected two parts, separated by '/' in GitLab releases package, got %s", pkg), IsParameterError: true}
 	}

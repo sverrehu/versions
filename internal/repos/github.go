@@ -7,7 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
-	"regexp"
+	"strings"
 	"time"
 
 	"github.com/sverrehu/versions/internal"
@@ -238,7 +238,7 @@ func NewGitHubTagsFetcher(datasource *config.Datasource) *GitHubTagsFetcher {
 }
 
 func (rf *GitHubReleasesFetcher) GetReleases(pkg string) (*internal.ReleasesResponse, error) {
-	parts := regexp.MustCompile("[/]").Split(pkg, -1)
+	parts := strings.Split(pkg, "/")
 	if len(parts) != 2 {
 		return nil, &FetcherError{Err: fmt.Errorf("expected two parts, separated by '/' in GitHub releases package, got %s", pkg), IsParameterError: true}
 	}
@@ -282,9 +282,9 @@ func (rf *GitHubReleasesFetcher) extractReleases(_, _, jsonResponse string) ([]i
 }
 
 func (rf *GitHubTagsFetcher) GetReleases(pkg string) (*internal.ReleasesResponse, error) {
-	parts := regexp.MustCompile("[/]").Split(pkg, -1)
+	parts := strings.Split(pkg, "/")
 	if len(parts) != 2 {
-		return nil, &FetcherError{Err: fmt.Errorf("expected two parts, separated by '/' in GitHub releases package, got %s", pkg), IsParameterError: true}
+		return nil, &FetcherError{Err: fmt.Errorf("expected two parts, separated by '/' in GitHub tags package, got %s", pkg), IsParameterError: true}
 	}
 	return rf.getReleases(parts[0], parts[1])
 }
