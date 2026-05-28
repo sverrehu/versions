@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.6.1](https://github.com/sverrehu/versions/compare/v0.6.0...v0.6.1) (2026-05-28)
+
+
+### Bug Fixes
+
+* reuse http client, set timeout ([#98](https://github.com/sverrehu/versions/issues/98)) ([3a3f17f](https://github.com/sverrehu/versions/commit/3a3f17f553713597572a379336224c34cd86e3a1))
+* robustify webclient.Get ([#100](https://github.com/sverrehu/versions/issues/100)) ([dfb8712](https://github.com/sverrehu/versions/commit/dfb8712c55043d3558bc0ee8f471e06154df1eb6))
+
 ## [0.6.0](https://github.com/sverrehu/versions/compare/v0.5.2...v0.6.0) (2026-05-07)
 
 
