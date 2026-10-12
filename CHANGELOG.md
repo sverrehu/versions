@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.6.4](https://github.com/sverrehu/versions/compare/v0.6.3...v0.6.4) (2026-10-12)
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/sverrehu/goutils to v1.0.4 ([#112](https://github.com/sverrehu/versions/issues/112)) ([446084c](https://github.com/sverrehu/versions/commit/446084c5e41bfa149b403a986bbac85fa82351e1))
+* **deps:** update module github.com/sverrehu/goutils to v1.0.5 ([#119](https://github.com/sverrehu/versions/issues/119)) ([b6aa4d6](https://github.com/sverrehu/versions/commit/b6aa4d6b526aaa6f3737b73aa3ed2350e34e6f6d))
+
 ## [0.6.3](https://github.com/sverrehu/versions/compare/v0.6.2...v0.6.3) (2026-07-16)
 
 
