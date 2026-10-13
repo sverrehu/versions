@@ -83,11 +83,11 @@ func (rf *OCIReleasesFetcher) getReleases(owner, repo string) (*internal.Release
 	return &releasesResponse, nil
 }
 
-func (rf *OCIReleasesFetcher) extractReleases(_, _, jsonResponse string) ([]internal.Release, error) {
+func (rf *OCIReleasesFetcher) extractReleases(_, _, jsonResponse string) ([]internal.Release, bool, error) {
 	var resp fullOCIResponse
 	err := json.Unmarshal([]byte(jsonResponse), &resp)
 	if err != nil {
-		return nil, err
+		return nil, true, err
 	}
 	releases := make([]internal.Release, 0, resp.Count)
 	for _, result := range resp.Results {
@@ -97,5 +97,5 @@ func (rf *OCIReleasesFetcher) extractReleases(_, _, jsonResponse string) ([]inte
 		}
 		releases = append(releases, release)
 	}
-	return releases, nil
+	return releases, len(releases) == 0, nil
 }

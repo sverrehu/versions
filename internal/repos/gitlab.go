@@ -115,11 +115,11 @@ func (rf *GitLabReleasesFetcher) getReleases(owner, repo string) (*internal.Rele
 	return &releasesResponse, nil
 }
 
-func (rf *GitLabReleasesFetcher) extractReleases(_, _, jsonResponse string) ([]internal.Release, error) {
+func (rf *GitLabReleasesFetcher) extractReleases(_, _, jsonResponse string) ([]internal.Release, bool, error) {
 	var resp fullGitLabReleasesResponse
 	err := json.Unmarshal([]byte(jsonResponse), &resp)
 	if err != nil {
-		return nil, err
+		return nil, true, err
 	}
 	releases := make([]internal.Release, 0, len(resp))
 	for _, result := range resp {
@@ -130,5 +130,5 @@ func (rf *GitLabReleasesFetcher) extractReleases(_, _, jsonResponse string) ([]i
 		}
 		releases = append(releases, release)
 	}
-	return releases, nil
+	return releases, len(releases) == 0, nil
 }
