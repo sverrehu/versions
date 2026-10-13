@@ -33,3 +33,7 @@ datasources:
     credentials:
       token: ""
     maxReleases: 1000
+  quay:
+    credentials:
+      token: ""
+    maxReleases: 1000

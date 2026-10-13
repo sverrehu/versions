@@ -109,5 +109,6 @@ func setupHandlers() {
 		{target: "/gitlab-releases", handler: &commonReleasesHandler{h: repos.NewGitLabReleasesFetcher(datasourcesCfg.GitLabReleasesDatasource)}},
 		{target: "/maven", handler: &commonReleasesHandler{h: repos.NewMavenReleasesFetcher(datasourcesCfg.MavenDatasource)}},
 		{target: "/dockerhub", handler: &commonReleasesHandler{h: repos.NewOCIReleasesFetcher(datasourcesCfg.DockerhubDatasource)}},
+		{target: "/quay", handler: &commonReleasesHandler{h: repos.NewQuayReleasesFetcher(datasourcesCfg.QuayDatasource)}},
 	}
 }

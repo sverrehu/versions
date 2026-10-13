@@ -262,11 +262,11 @@ func (rf *GitHubReleasesFetcher) getReleases(owner, repo string) (*internal.Rele
 	return &releasesResponse, nil
 }
 
-func (rf *GitHubReleasesFetcher) extractReleases(_, _, jsonResponse string) ([]internal.Release, error) {
+func (rf *GitHubReleasesFetcher) extractReleases(_, _, jsonResponse string) ([]internal.Release, bool, error) {
 	var resp fullGitHubReleasesResponse
 	err := json.Unmarshal([]byte(jsonResponse), &resp)
 	if err != nil {
-		return nil, err
+		return nil, true, err
 	}
 	releases := make([]internal.Release, 0, len(resp))
 	for _, result := range resp {
@@ -278,7 +278,7 @@ func (rf *GitHubReleasesFetcher) extractReleases(_, _, jsonResponse string) ([]i
 		}
 		releases = append(releases, release)
 	}
-	return releases, nil
+	return releases, len(releases) == 0, nil
 }
 
 func (rf *GitHubTagsFetcher) GetReleases(pkg string) (*internal.ReleasesResponse, error) {
@@ -306,18 +306,18 @@ func (rf *GitHubTagsFetcher) getReleases(owner, repo string) (*internal.Releases
 	return &releasesResponse, nil
 }
 
-func (rf *GitHubTagsFetcher) extractReleases(owner, repo, jsonResponse string) ([]internal.Release, error) {
+func (rf *GitHubTagsFetcher) extractReleases(owner, repo, jsonResponse string) ([]internal.Release, bool, error) {
 	var resp fullGitHubTagsResponse
 	err := json.Unmarshal([]byte(jsonResponse), &resp)
 	if err != nil {
-		return nil, err
+		return nil, true, err
 	}
 	releases := make([]internal.Release, 0, len(resp))
 	for _, result := range resp {
 		var timestamp time.Time
 		timestamp, err = rf.fetchTimestamp(owner, repo, result.Commit.Sha)
 		if err != nil {
-			return nil, err
+			return nil, true, err
 		}
 		release := internal.Release{
 			Version:          result.Name,
@@ -325,7 +325,7 @@ func (rf *GitHubTagsFetcher) extractReleases(owner, repo, jsonResponse string) (
 		}
 		releases = append(releases, release)
 	}
-	return releases, nil
+	return releases, len(releases) == 0, nil
 }
 
 func (rf *GitHubTagsFetcher) fetchTimestamp(owner, repo, commitSha string) (time.Time, error) {

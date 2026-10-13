@@ -9,7 +9,7 @@ import (
 type Fetcher interface {
 	GetReleases(pkg string) (*internal.ReleasesResponse, error)
 	getSearchUrl(owner, repo string, page int) string
-	extractReleases(owner, repo, jsonResponse string) ([]internal.Release, error)
+	extractReleases(owner, repo, jsonResponse string) ([]internal.Release, bool, error)
 }
 
 type FetcherBase struct {
@@ -53,11 +53,11 @@ func (fb *FetcherBase) paginate(f Fetcher, releasesResponse *internal.ReleasesRe
 		if body == "" {
 			break
 		}
-		releases, err := f.extractReleases(owner, repo, body)
+		releases, terminate, err := f.extractReleases(owner, repo, body)
 		if err != nil {
 			return err
 		}
-		if len(releases) == 0 {
+		if terminate {
 			break
 		}
 		releasesResponse.Releases = append(releasesResponse.Releases, releases...)
