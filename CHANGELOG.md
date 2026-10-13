@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.0](https://github.com/sverrehu/versions/compare/v0.6.4...v0.7.0) (2026-10-13)
+
+
+### Features
+
+* add support for quay.io images ([#120](https://github.com/sverrehu/versions/issues/120)) ([66e2c7b](https://github.com/sverrehu/versions/commit/66e2c7b7099ec3bed6a8cae720d9218e5054b01d))
+
 ## [0.6.4](https://github.com/sverrehu/versions/compare/v0.6.3...v0.6.4) (2026-10-12)
 
 
