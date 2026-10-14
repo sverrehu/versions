@@ -83,7 +83,7 @@ func (rf *OCIReleasesFetcher) getReleases(owner, repo string) (*internal.Release
 	return &releasesResponse, nil
 }
 
-func (rf *OCIReleasesFetcher) extractReleases(_, _, jsonResponse string) ([]internal.Release, bool, error) {
+func (rf *OCIReleasesFetcher) extractReleases(owner, repo, jsonResponse string) ([]internal.Release, bool, error) {
 	var resp fullOCIResponse
 	err := json.Unmarshal([]byte(jsonResponse), &resp)
 	if err != nil {
@@ -94,6 +94,7 @@ func (rf *OCIReleasesFetcher) extractReleases(_, _, jsonResponse string) ([]inte
 		release := internal.Release{
 			Version:          result.Name,
 			ReleaseTimestamp: result.TagLastPushed,
+			SourceURL:        new("https://hub.docker.com/r/" + url.PathEscape(owner) + "/" + url.PathEscape(repo)),
 		}
 		releases = append(releases, release)
 	}

@@ -65,7 +65,7 @@ func (rf *QuayReleasesFetcher) getReleases(owner, repo string) (*internal.Releas
 	return &releasesResponse, nil
 }
 
-func (rf *QuayReleasesFetcher) extractReleases(_, _, jsonResponse string) ([]internal.Release, bool, error) {
+func (rf *QuayReleasesFetcher) extractReleases(owner, repo, jsonResponse string) ([]internal.Release, bool, error) {
 	var resp fullQuayResponse
 	err := json.Unmarshal([]byte(jsonResponse), &resp)
 	if err != nil {
@@ -79,6 +79,7 @@ func (rf *QuayReleasesFetcher) extractReleases(_, _, jsonResponse string) ([]int
 		release := internal.Release{
 			Version:          result.Name,
 			ReleaseTimestamp: time.Unix(result.StartTs, 0),
+			SourceURL:        new("https://quay.io/repository/" + url.PathEscape(owner) + "/" + url.PathEscape(repo)),
 		}
 		releases = append(releases, release)
 	}
