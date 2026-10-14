@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.1](https://github.com/sverrehu/versions/compare/v0.7.0...v0.7.1) (2026-10-14)
+
+
+### Bug Fixes
+
+* add SourceURL for docker and quay ([#122](https://github.com/sverrehu/versions/issues/122)) ([0e052f0](https://github.com/sverrehu/versions/commit/0e052f072e2923b4760d8fef06a47abf5b10d62d))
+
 ## [0.7.0](https://github.com/sverrehu/versions/compare/v0.6.4...v0.7.0) (2026-10-13)
 
 
