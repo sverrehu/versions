@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.3](https://github.com/sverrehu/versions/compare/v0.7.2...v0.7.3) (2026-11-03)
+
+
+### Bug Fixes
+
+* **deps:** update module go.yaml.in/yaml/v4 to v4.0.0-rc.9 ([#127](https://github.com/sverrehu/versions/issues/127)) ([3bcf06b](https://github.com/sverrehu/versions/commit/3bcf06bd2144bb67333263300891308a54e66793))
+
 ## [0.7.2](https://github.com/sverrehu/versions/compare/v0.7.1...v0.7.2) (2026-11-02)
 
 
