@@ -6,6 +6,8 @@ github.com/sverrehu/goutils v1.0.5 h1:/RcmkY8ilpYCbiKQewMyaPUOX95386LM6AIay+e44F
 github.com/sverrehu/goutils v1.0.5/go.mod h1:g6Gl+zrIW8VTSS2Hr+28qVJk1NYm1AfNAP7/w4D3tzQ=
 github.com/sverrehu/goutils v1.0.6 h1:qVXpIO1DwHuuYSc0F/Mrs0I5eKS3QmlYOMOuR3khyvw=
 github.com/sverrehu/goutils v1.0.6/go.mod h1:WzNCdjZVen9J0PThvs2Zw2sZfB8RK00Yu+udcE/44G4=
+github.com/sverrehu/goutils v1.0.7 h1:CL0Rfi5KtqPOZVdKXIsURH0O5KJ3hWR7vQFlRlyR5wE=
+github.com/sverrehu/goutils v1.0.7/go.mod h1:WzNCdjZVen9J0PThvs2Zw2sZfB8RK00Yu+udcE/44G4=
 go.yaml.in/yaml/v4 v4.0.0-rc.6 h1:1h7H1ohdUh93/FyE4YaDa1Zh64K6VVbjF4K6WUxMtH4=
 go.yaml.in/yaml/v4 v4.0.0-rc.6/go.mod h1:aZqd9kCMsGL7AuUv/m/PvWLdg5sjJsZ4oHDEnfPPfY0=
 go.yaml.in/yaml/v4 v4.0.0-rc.8 h1:fN4inF7W6XHH4Kb0btX0spuNk02igzhJa+rGbuRCkkY=
